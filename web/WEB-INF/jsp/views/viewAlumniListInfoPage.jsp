@@ -18,9 +18,11 @@
         <div style="width: 98%;display: block;margin-left: auto;margin-right: auto; margin-top: 10px; margin-bottom: 10px;">
             <%@include file="../components/search.jsp" %>
         </div>
+        <%  if((Integer)request.getAttribute("totalPages") > 0) { %>
         <div style="width: 98%;display: block;margin-left: auto;margin-right: auto; margin-top: 10px; margin-bottom: 10px;">
             <%@include file="../components/filter.jsp" %>
         </div>
+        <%  } %>
         <div style="width: 98%;display: block;margin-left: auto;margin-right: auto; margin-top: 10px; margin-bottom: 10px;">
             <table class="table table-hover">
                 <thead>
@@ -74,9 +76,11 @@
                 </tbody>
             </table>
         </div>
-                
+        
+        <%  if((Integer)request.getAttribute("totalPages") > 0) { %>
         <div style="width: 98%;display: block;margin-left: auto;margin-right: auto; margin-top: 10px; margin-bottom: 10px;">
             <%@include file="../components/pagination.jsp" %>
         </div>
+        <%  } %>
     </body>
 </html>
