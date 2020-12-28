@@ -11,6 +11,9 @@
 <%  //session.setAttribute("currentUserType", "alumni"); %>
 <%  //session.setAttribute("currentAlumniID", "A18CS0921"); %>
 
+// This is some changes...
+
+
 <!DOCTYPE html>
 <html>
     <head>

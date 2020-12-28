@@ -712,7 +712,7 @@ public class AlumniServlet extends HttpServlet {
     }
     
     private Connection getCon() throws SQLException, ClassNotFoundException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
+        Class.forName("com.mysql.cj.jdbc.Driver"); 
         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3307/alumni_module-db", "root", "");
         
         return con;
