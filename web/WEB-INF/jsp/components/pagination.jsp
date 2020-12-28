@@ -21,32 +21,45 @@
                 <div class="row">
                     <div class="col">
                         <ul class="pagination">
-                            <li class="page-item" v-else>
-                                <button class="page-link">First</button>
+                            <li class="page-item">
+                                <form action="AlumniServlet" method="POST" >
+                                    <input type="hidden" name="requestType" value="goToFirstPage">
+                                    <input type="submit" class="page-link" value="First">
+                                </form>
                             </li>
 
-                            <li class="page-item" v-else>
-                                <button class="page-link">Previous</button>
+                            <li class="page-item">
+                                <form action="AlumniServlet" method="POST" >
+                                    <input type="hidden" name="requestType" value="goToPreviousPage">
+                                    <input type="submit" class="page-link" value="Previous">
+                                </form>
                             </li>
                             
                             <li class="page-item active" aria-current="page">
-                                <a class="page-link" href="#"> <% out.print(request.getAttribute("currentPage")); %> <span class="sr-only">(current)</span></a>
+                                <a class="page-link" href="#"> <%= request.getAttribute("currentPage") %> <span class="sr-only">(current)</span></a>
                             </li>
 
-                            <li class="page-item" v-if="currentPage != lastPage">
-                                <button class="page-link">Next</button>
+                            <li class="page-item">
+                                <form action="AlumniServlet" method="POST" >
+                                    <input type="hidden" name="requestType" value="goToNextPage">
+                                    <input type="submit" class="page-link" value="Next">
+                                </form>
                             </li>
 
-                            <li class="page-item" v-if="currentPage != lastPage">
-                                <button class="page-link">Last</button>
+                            <li class="page-item">
+                                <form action="AlumniServlet" method="POST" >
+                                    <input type="hidden" name="requestType" value="goToLastPage">
+                                    <input type="submit" class="page-link" value="Last">
+                                </form>
                             </li>
                         </ul>
                     </div>
                     <div class="col">
                         <ul class="pagination justify-content-center">
                             <li class="page-item">
-                                <form class="form-inline">
-                                    <input class="form-control mr-sm-2" v-model="chosenPage" type="number" placeholder="..." min="1" :max="totalPage"  required>
+                                <form class="form-inline" action="AlumniServlet" method="POST">
+                                    <input type="hidden" name="requestType" value="goToSelectedPage">
+                                    <input class="form-control mr-sm-2" name="selectedPage" type="number" placeholder="..." min="1" max="<%= (Integer)request.getAttribute("currentPage") %>"  required>
                                     <input type="submit" class="btn btn-outline-success" value="Go" />
                                 </form> 
                             </li>

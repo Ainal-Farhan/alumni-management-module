@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3307
--- Generation Time: Dec 28, 2020 at 05:57 AM
+-- Generation Time: Dec 28, 2020 at 03:47 PM
 -- Server version: 10.4.13-MariaDB
 -- PHP Version: 7.4.8
 
@@ -66,7 +66,17 @@ CREATE TABLE `alumni` (
 --
 
 INSERT INTO `alumni` (`alumniID`, `alumniAddress1`, `alumniAddress2`, `alumniAddressCity`, `alumniAddressCountry`, `alumniAddressPostCode`, `alumniAddressState`, `alumniBatch`, `alumniCurEmployer`, `alumniCurJob`, `alumniCurSalary`, `alumniDegree`, `alumniEmail`, `alumniFieldOfSpecialization`, `alumniGraduateYear`, `alumniName`, `alumniPhoneNumber`, `alumniPrevEmployer`, `alumniPrevJob`, `alumniPrevSalary`, `alumniProfilePicture`, `alumniProfStatus`, `alumniProfStatusYearGained`, `alumniUsername`, `alumniUserPassword`, `employerAddress1`, `employerAddress2`, `employerAddressCity`, `employerAddressCountry`, `employerAddressPostCode`, `employerAddressState`) VALUES
+('A18CS0001', 'none', 'none', 'none', 'none', '00000', 'none', 0, 'none', 'none', 0, 'none', 'none', 'none', 0000, 'none', 'none', 'none', 'none', 0, 'default.png', 'Sir', 0000, 'none', 'none', 'none', 'none', 'none', 'none', '00000', 'none'),
+('A18CS0021', 'none', 'none', 'none', 'none', '00000', 'none', 0, 'none', 'none', 0, 'none', 'none', 'none', 0000, 'none', 'none', 'none', 'none', 0, 'default.png', 'Sir', 0000, 'none', 'none', 'none', 'none', 'none', 'none', '00000', 'none'),
+('A18CS0022', 'none', 'none', 'none', 'none', '00000', 'none', 0, 'none', 'none', 0, 'none', 'none', 'none', 0000, 'none', 'none', 'none', 'none', 0, 'default.png', 'Sir', 0000, 'none', 'none', 'none', 'none', 'none', 'none', '00000', 'none'),
+('A18CS0031', 'none', 'none', 'none', 'none', '00000', 'none', 0, 'none', 'none', 0, 'none', 'none', 'none', 0000, 'none', 'none', 'none', 'none', 0, 'default.png', 'Sir', 0000, 'none', 'none', 'none', 'none', 'none', 'none', '00000', 'none'),
+('A18CS0033', 'none', 'none', 'none', 'none', '00000', 'none', 0, 'none', 'none', 0, 'none', 'none', 'none', 0000, 'none', 'none', 'none', 'none', 0, 'default.png', 'Sir', 0000, 'none', 'none', 'none', 'none', 'none', 'none', '00000', 'none'),
+('A18CS0082', 'none', 'none', 'none', 'none', '00000', 'none', 0, 'none', 'none', 0, 'none', 'none', 'none', 0000, 'none', 'none', 'none', 'none', 0, 'default.png', 'Sir', 0000, 'none', 'none', 'none', 'none', 'none', 'none', '00000', 'none'),
+('A18CS0087', 'none', 'none', 'none', 'none', '00000', 'none', 0, 'none', 'none', 0, 'none', 'none', 'none', 0000, 'none', 'none', 'none', 'none', 0, 'default.png', 'Sir', 0000, 'none', 'none', 'none', 'none', 'none', 'none', '00000', 'none'),
+('A18CS0099', 'none', 'none', 'none', 'none', '00000', 'none', 0, 'none', 'none', 0, 'none', 'none', 'none', 0000, 'none', 'none', 'none', 'none', 0, 'default.png', 'Sir', 0000, 'none', 'none', 'none', 'none', 'none', 'none', '00000', 'none'),
+('A18CS0111', 'none', 'none', 'none', 'none', '00000', 'none', 0, 'none', 'none', 0, 'none', 'none', 'none', 0000, 'none', 'none', 'none', 'none', 0, 'default.png', 'Sir', 0000, 'none', 'none', 'none', 'none', 'none', 'none', '00000', 'none'),
 ('A18CS0193', 'No L3-2017', 'Jalan Gemilang', 'Lurah Bilut', 'Malaysia', '28800', 'Pahang', 21, 'Government Architect Sdn Bhd', 'Senior Architect', 10000, 'Bachelor in Architecture', 'mohd.zakuan@gmail.com', 'SeniBina', 2014, 'Mohd Zakuan bin Zamri', '01111883722', 'Government Architect Sdn Bhd', 'Junior Architect', 5000, 'default.png', 'Tan Sri', 2020, 'none', 'none', 'Government Architect Sdn Bhd', 'Jalan 3, Gemilang 1', 'Bentong', '28800', 'Pahang', 'Malaysia'),
+('A18CS0921', 'none', 'none', 'none', 'none', '00000', 'none', 16, 'none', 'none', 0, 'none', 'amar@gmail.com', 'none', 2012, 'Amar ', '0139568557', 'none', 'none', 0, 'default.png', 'Sir', 2010, 'none', 'none', 'none', 'none', 'none', 'none', 'none', '00000'),
 ('A18CS0992', 'none', 'none', 'none', 'none', '00000', 'none', 0, 'none', 'none', 0, 'none', 'none', 'none', 0000, 'none', 'none', 'none', 'none', 0, 'default.png', 'Sir', 0000, 'none', 'none', 'none', 'none', 'none', 'none', '00000', 'none'),
 ('none', 'none', 'none', 'none', 'none', '00000', 'none', 21, 'none', 'none', 0, 'none', 'none', 'none', 2009, 'none', 'none', 'none', 'none', 0, 'default.png', 'Sir', 0000, 'none', 'none', 'none', 'none', 'none', 'none', '00000', 'none');
 

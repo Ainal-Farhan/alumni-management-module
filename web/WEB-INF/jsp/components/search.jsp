@@ -17,23 +17,27 @@
     </head>
     <body>
         <div class="search-container">
-            <form class="form-inline">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" required>
-                <input type="submit" class="btn btn-outline-success my-2 my-sm-0" value="Search" />
-                <input type="button" class="btn btn-outline-success my-2 my-sm-0" value="Reset" />
+            <form class="form-inline" action="AlumniServlet" method="POST">
+                <input type="hidden" name="requestType" value="searchAlumni">
+                <input class="form-control mr-sm-2" type="search" name="searchInfo" placeholder="Search" aria-label="Search" required>
+                <input type="submit" class="btn btn-outline-success my-2 my-sm-0" name="searchBtn" value="Search" />
                 <div class="form-check form-check-inline" style="margin-left: 10px;">
-                    <input class="form-check-input" type="radio" name="searchReq" id="searchByName" value="name" checked>
+                    <input class="form-check-input" type="radio" name="searchReq" id="searchByName" value="searchByName" checked>
                     <label class="form-check-label" for="searchByName">Name</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="searchReq" id="searchByBatch" value="batch">
+                    <input class="form-check-input" type="radio" name="searchReq" id="searchByBatch" value="searchByBatch">
                     <label class="form-check-label" for="searchByBatch">Batch</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="searchReq" id="searchByLocationInState" value="locationInState">
+                    <input class="form-check-input" type="radio" name="searchReq" id="searchByLocationInState" value="searchByLocationInState">
                     <label class="form-check-label" for="searchByLocationInState">Location (State)</label>
                 </div>
             </form> 
+            <form action="AlumniServlet" method="POST" style="margin-top: 10px;margin-bottom: 10px;">
+                <input type="hidden" name="requestType" value="searchAlumni">
+                <input type="submit" class="btn btn-outline-danger my-2 my-sm-0" name="resetBtn" value="Reset" />
+            </form>
         </div>
     </body>
 </html>

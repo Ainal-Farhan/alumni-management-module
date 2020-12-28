@@ -15,6 +15,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -33,6 +35,20 @@ public class AlumniServlet extends HttpServlet {
     private static ArrayList<Alumni> alumniList;
     private static int totalAlumni = 0;
     private static Alumni currentAlumni;
+    
+    private static int totalPages;
+    private final int TOTAL_ALUMNI_PER_PAGE = 10;
+    private static int currentPage = 1;
+    
+    private static Comparator<Alumni> ascAlumniName;
+    private static Comparator<Alumni> descAlumniName;
+
+    // We initialize static variables inside a static block.
+    static {
+        ascAlumniName = (Alumni alumni1, Alumni alumni2) -> alumni1.getAlumniName().compareTo(alumni2.getAlumniName());
+        descAlumniName = (Alumni alumni1, Alumni alumni2) -> alumni2.getAlumniName().compareTo(alumni1.getAlumniName());
+    }
+            
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -54,6 +70,8 @@ public class AlumniServlet extends HttpServlet {
             
             if(requestType.equalsIgnoreCase("viewAlumniList")) {
                 if(getAllAlumniInfoFromDatabase()) {
+                    sortAlumniByNameAscendingOrder();
+                    goToFirstPage();
                     processViewAlumniList(request, response);
                 }
                 else {
@@ -97,7 +115,8 @@ public class AlumniServlet extends HttpServlet {
                 else if(btnCancelSelected != null) {
                     viewManageInfoPage(request, response);
                 }
-            }else if(requestType.equalsIgnoreCase("confirmDeleteAlumniInfo")) {
+            }
+            else if(requestType.equalsIgnoreCase("confirmDeleteAlumniInfo")) {
                 String btnYesSelected = request.getParameter("yes-btn");
                 String btnNoSelected = request.getParameter("no-btn");
                 
@@ -108,6 +127,135 @@ public class AlumniServlet extends HttpServlet {
                     viewManageInfoPage(request, response);
                 }
             }
+            else if(requestType.equalsIgnoreCase("goToSelectedPage")) {
+                goToSelectedPage(Integer.parseInt(request.getParameter("selectedPage")));
+                processViewAlumniList(request, response);
+            }
+            else if(requestType.equalsIgnoreCase("goToFirstPage")) {
+                goToFirstPage();
+                processViewAlumniList(request, response);
+            }
+            else if(requestType.equalsIgnoreCase("goToPreviousPage")) {
+                goToPreviousPage();
+                processViewAlumniList(request, response);
+            }
+            else if(requestType.equalsIgnoreCase("goToNextPage")) {
+                goToNextPage();
+                processViewAlumniList(request, response);
+            }
+            else if(requestType.equalsIgnoreCase("goToLastPage")) {
+                goToLastPage();
+                processViewAlumniList(request, response);
+            }
+            else if(requestType.equalsIgnoreCase("filterAlumniInfo")) {
+                
+                if(request.getParameter("filterReq").equalsIgnoreCase("orderByNameAtoZ")) {
+                    sortAlumniByNameAscendingOrder();
+                    request.setAttribute("filterReq", "orderByNameAtoZ");
+                }
+                else if(request.getParameter("filterReq").equalsIgnoreCase("orderByNameZtoA")) {
+                    sortAlumniByNameDescendingOrder();
+                    request.setAttribute("filterReq", "orderByNameZtoA");
+                }
+                
+                goToFirstPage();
+                processViewAlumniList(request, response);
+            }
+            else if(requestType.equalsIgnoreCase("searchAlumni")) {
+                String searchBtn = request.getParameter("searchBtn");
+                String resetBtn = request.getParameter("resetBtn");
+                
+                if(searchBtn != null) {
+                    String searchReq = request.getParameter("searchReq");
+                    String searchInfo = request.getParameter("searchInfo");
+
+                    if(searchReq.equalsIgnoreCase("searchByName")) {
+                        searchByAlumniName(searchInfo);
+                    }
+                    else if(searchReq.equalsIgnoreCase("searchByBatch")) {
+                        searchByAlumniBatch(Integer.parseInt(searchInfo));
+                    }
+                    else if(searchReq.equalsIgnoreCase("searchByLocationInState")) {
+                        searchByAlumniLocationInState(searchInfo);
+                    }
+
+                    sortAlumniByNameAscendingOrder();
+                    request.setAttribute("filterReq", "orderByNameAtoZ");
+                    request.setAttribute("selectedSearchReq", searchReq);
+                    goToFirstPage();
+                    processViewAlumniList(request, response);
+                }
+                else if(resetBtn != null){
+                    if(getAllAlumniInfoFromDatabase()) {
+                        sortAlumniByNameAscendingOrder();
+                        goToFirstPage();
+                        processViewAlumniList(request, response);
+                    }
+                    else {
+                        out.println("Error Happen when retrieving all of the alumni information from database");
+                    }
+                }
+            }
+        }
+    }
+    
+    private void searchByAlumniName(String searchInfo) {
+        ArrayList<Alumni> searchResults = new ArrayList<Alumni>();
+        
+        for(int i = 0; i < totalAlumni; i++) {
+            if(alumniList.get(i).getAlumniName().toUpperCase().contains(searchInfo.toUpperCase())) {
+                searchResults.add(alumniList.get(i));
+            }
+        }
+        
+        alumniList = new ArrayList<Alumni>();
+        alumniList = searchResults;
+        totalAlumni = searchResults.size();
+        totalPages = totalAlumni / TOTAL_ALUMNI_PER_PAGE;
+            
+        int remain = totalAlumni % TOTAL_ALUMNI_PER_PAGE;
+        if(remain > 0) {
+            totalPages += 1;
+        }
+    }
+
+    private void searchByAlumniBatch(int searchInfo) {
+        ArrayList<Alumni> searchResults = new ArrayList<Alumni>();
+        
+        for(int i = 0; i < totalAlumni; i++) {
+            if(alumniList.get(i).getAlumniBatch() == searchInfo) {
+                searchResults.add(alumniList.get(i));
+            }
+        }
+        
+        alumniList = new ArrayList<Alumni>();
+        alumniList = searchResults;
+        totalAlumni = searchResults.size();
+        totalPages = totalAlumni / TOTAL_ALUMNI_PER_PAGE;
+            
+        int remain = totalAlumni % TOTAL_ALUMNI_PER_PAGE;
+        if(remain > 0) {
+            totalPages += 1;
+        }
+    }
+
+    private void searchByAlumniLocationInState(String searchInfo) {
+        ArrayList<Alumni> searchResults = new ArrayList<Alumni>();
+        
+        for(int i = 0; i < totalAlumni; i++) {
+            if(alumniList.get(i).getAlumniAddressState().toUpperCase().contains(searchInfo.toUpperCase())) {
+                searchResults.add(alumniList.get(i));
+            }
+        }
+        
+        alumniList = new ArrayList<Alumni>();
+        alumniList = searchResults;
+        totalAlumni = searchResults.size();
+        totalPages = totalAlumni / TOTAL_ALUMNI_PER_PAGE;
+            
+        int remain = totalAlumni % TOTAL_ALUMNI_PER_PAGE;
+        if(remain > 0) {
+            totalPages += 1;
         }
     }
     
@@ -148,6 +296,34 @@ public class AlumniServlet extends HttpServlet {
             status = false;
         } finally {
             return status;
+        }
+    }
+    
+    private void sortAlumniByNameAscendingOrder() {
+        Alumni[] alumniArray = new Alumni[totalAlumni];
+        
+        for(int i = 0; i < totalAlumni; i++) {
+            alumniArray[i] = alumniList.get(i);
+        }
+        
+        Arrays.sort(alumniArray, ascAlumniName);
+        
+        for(int i = 0; i < totalAlumni; i++) {
+            alumniList.set(i, alumniArray[i]);
+        }
+    }
+    
+    private void sortAlumniByNameDescendingOrder() {
+        Alumni[] alumniArray = new Alumni[totalAlumni];
+        
+        for(int i = 0; i < totalAlumni; i++) {
+            alumniArray[i] = alumniList.get(i);
+        }
+        
+        Arrays.sort(alumniArray, descAlumniName);
+        
+        for(int i = 0; i < totalAlumni; i++) {
+            alumniList.set(i, alumniArray[i]);
         }
     }
     
@@ -393,28 +569,46 @@ public class AlumniServlet extends HttpServlet {
     
     private void processViewAlumniList(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+               
+        String[] alumniID = new String[TOTAL_ALUMNI_PER_PAGE];
+        String[] alumniName = new String[TOTAL_ALUMNI_PER_PAGE];
+        String[] alumniEmail = new String[TOTAL_ALUMNI_PER_PAGE];
+        String[] alumniState = new String[TOTAL_ALUMNI_PER_PAGE]; 
+        String[] alumniGraduationYear = new String[TOTAL_ALUMNI_PER_PAGE];
+        String[] alumniBatch = new String[TOTAL_ALUMNI_PER_PAGE];
+        String[] alumniProfStatus = new String[TOTAL_ALUMNI_PER_PAGE];
+        String[] alumniCurJob = new String[TOTAL_ALUMNI_PER_PAGE];
         
-        String[] alumniID = new String[totalAlumni];
-        String[] alumniName = new String[totalAlumni];
-        String[] alumniEmail = new String[totalAlumni];
-        String[] alumniState = new String[totalAlumni]; 
-        String[] alumniGraduationYear = new String[totalAlumni];
-        String[] alumniBatch = new String[totalAlumni];
-        String[] alumniProfStatus = new String[totalAlumni];
-        String[] alumniCurJob = new String[totalAlumni];
-        
-        for(int i = 0; i < totalAlumni; i++) {
-            alumniID[i] = alumniList.get(i).getAlumniID();
-            alumniName[i] = alumniList.get(i).getAlumniName();
-            alumniEmail[i] = alumniList.get(i).getAlumniEmail();
-            alumniState[i] = alumniList.get(i).getAlumniAddressState();
-            alumniGraduationYear[i] = Integer.toString(alumniList.get(i).getAlumniGraduateYear());
-            alumniBatch[i] = Integer.toString(alumniList.get(i).getAlumniBatch());
-            alumniProfStatus[i] = alumniList.get(i).getAlumniProfStatus();
-            alumniCurJob[i] = alumniList.get(i).getAlumniCurJob();
+        int j = currentPage * TOTAL_ALUMNI_PER_PAGE - TOTAL_ALUMNI_PER_PAGE;
+                
+        for(int i = 0; i < TOTAL_ALUMNI_PER_PAGE; i++, j++) {
+            if(alumniList.isEmpty() || j >= totalAlumni) {
+                alumniID[i] = "";
+                alumniName[i] = "";
+                alumniEmail[i] = "";
+                alumniState[i] = "";
+                alumniGraduationYear[i] = "";
+                alumniBatch[i] = "";
+                alumniProfStatus[i] = "";
+                alumniCurJob[i] = "";
+                continue;
+            }
+            
+            alumniID[i] = alumniList.get(j).getAlumniID();
+            alumniName[i] = alumniList.get(j).getAlumniName();
+            alumniEmail[i] = alumniList.get(j).getAlumniEmail();
+            alumniState[i] = alumniList.get(j).getAlumniAddressState();
+            alumniGraduationYear[i] = Integer.toString(alumniList.get(j).getAlumniGraduateYear());
+            alumniBatch[i] = Integer.toString(alumniList.get(j).getAlumniBatch());
+            alumniProfStatus[i] = alumniList.get(j).getAlumniProfStatus();
+            alumniCurJob[i] = alumniList.get(j).getAlumniCurJob();
         }
         
-        request.setAttribute("totalAlumni", totalAlumni);
+        request.setAttribute("totalAlumni", totalAlumni);        
+        request.setAttribute("totalPages", totalPages);        
+        request.setAttribute("currentPage", currentPage);    
+        request.setAttribute("TOTAL_ALUMNI_PER_PAGE", TOTAL_ALUMNI_PER_PAGE);
+
         request.setAttribute("alumniIDArray", alumniID);
         request.setAttribute("alumniNameArray", alumniName);
         request.setAttribute("alumniEmailArray", alumniEmail);
@@ -426,6 +620,46 @@ public class AlumniServlet extends HttpServlet {
         
         RequestDispatcher dispatcher = getServletConfig().getServletContext().getRequestDispatcher("/WEB-INF/jsp/views/viewAlumniListInfoPage.jsp");
         dispatcher.forward(request, response);
+    }
+    
+    private void goToFirstPage() {
+        if(totalPages == 0) {
+            currentPage = 0;
+            return;
+        }
+        currentPage = 1;
+    }
+    
+    private void goToPreviousPage() {
+        if(totalPages == 0) {
+            currentPage = 0;
+            return;
+        }
+        if(currentPage == 1)
+            return;
+        currentPage--;
+    }
+    
+    private void goToNextPage() {
+        if(totalPages == 0) {
+            currentPage = 0;
+            return;
+        }
+        if(currentPage == totalPages)
+            return;
+        currentPage++;
+    }
+    
+    private void goToLastPage() {
+        if(totalPages == 0) {
+            currentPage = 0;
+            return;
+        }
+        currentPage = totalPages;
+    }
+    
+    private void goToSelectedPage(int selectedPage) {
+        currentPage = selectedPage;
     }
     
     private boolean getAllAlumniInfoFromDatabase() {
@@ -460,6 +694,13 @@ public class AlumniServlet extends HttpServlet {
             }
             
             totalAlumni = alumniList.size();
+            totalPages = totalAlumni / TOTAL_ALUMNI_PER_PAGE;
+            
+            int remain = totalAlumni % TOTAL_ALUMNI_PER_PAGE;
+            if(remain > 0) {
+                totalPages += 1;
+            }
+            
             return true;
             
         } catch (ClassNotFoundException | SQLException ex) {

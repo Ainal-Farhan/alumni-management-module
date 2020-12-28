@@ -47,10 +47,12 @@
                     <%  String[] alumniBatch = (String[])request.getAttribute("alumniBatchArray"); %>
                     <%  String[] alumniProfStatus = (String[])request.getAttribute("alumniProfStatusArray"); %>
                     <%  String[] alumniCurJob = (String[])request.getAttribute("alumniCurJobArray"); %>
-
-                    <% for(int i = 0; i < (Integer)request.getAttribute("totalAlumni"); i++) { %>
+                    
+                    <%  for(int i = 0; i < (Integer)request.getAttribute("TOTAL_ALUMNI_PER_PAGE"); i++) { %>
+                    <%      if(alumniID[i].equals("") && i == 0) { %><td colspan="9" style="text-align: center;"><% out.print("No Alumni Found!"); break;} %></td>
+                    <%      if(alumniID[i].equals("")) break;%>
                     <tr>
-                        <th scope="row"><% out.print(i+1); %></th>
+                        <th scope="row"><%= i+1+(Integer)request.getAttribute("TOTAL_ALUMNI_PER_PAGE") * (Integer)request.getAttribute("currentPage") - (Integer)request.getAttribute("TOTAL_ALUMNI_PER_PAGE") %></th>
                         <td><% out.print(alumniName[i]); %></td>
                         <td><% out.print(alumniEmail[i]); %></td>
                         <td><% out.print(alumniState[i]); %></td>

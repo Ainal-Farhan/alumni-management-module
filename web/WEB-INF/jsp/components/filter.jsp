@@ -17,15 +17,19 @@
     </head>
     <body>
         <div class="filter-container">
-            <form class="form-inline">
-                Filter :
+            <% String filterSelected = ""; %>
+            <% if(request.getAttribute("filterReq") != null) filterSelected = (String)request.getAttribute("filterReq"); %>
+            <form class="form-inline" action="AlumniServlet" method="POST">
+                <input type="hidden" name="requestType" value="filterAlumniInfo">
+                <input type="submit" value="Filter" class="btn btn-primary">
+                
                 <div class="form-check form-check-inline" style="margin-left: 20px;">
-                    <input class="form-check-input" type="radio" name="searchReq" id="orderByNameAtoZ" value="option1" checked>
-                    <label class="form-check-label" for="orderByNameAtoZ">Order By Name Form A to Z</label>
+                    <input class="form-check-input" type="radio" name="filterReq" id="orderByNameAtoZ" value="orderByNameAtoZ" <% if(filterSelected.equalsIgnoreCase("orderByNameAtoZ") || filterSelected.equals("")) out.print("checked"); %>>
+                    <label class="form-check-label" for="orderByNameAtoZ">Order By Name (Ascending)</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="searchReq" id="orderByNameZtoA" value="option2">
-                    <label class="form-check-label" for="orderByNameZtoA">Order By Name Form Z to A</label>
+                    <input class="form-check-input" type="radio" name="filterReq" id="orderByNameZtoA" value="orderByNameZtoA" <% if(filterSelected.equalsIgnoreCase("orderByNameZtoA")) out.print("checked"); %>>
+                    <label class="form-check-label" for="orderByNameZtoA">Order By Name (Descending)</label>
                 </div>
             </form>
         </div>
