@@ -17,20 +17,22 @@
     </head>
     <body>
         <div class="search-container">
+            <% String selectedSearchReq = ""; %>
+            <% if(request.getAttribute("selectedSearchReq") != null) selectedSearchReq = (String)request.getAttribute("selectedSearchReq"); %>
             <form class="form-inline" action="AlumniServlet" method="POST">
                 <input type="hidden" name="requestType" value="searchAlumni">
                 <input class="form-control mr-sm-2" type="search" name="searchInfo" placeholder="Search" aria-label="Search" required>
                 <input type="submit" class="btn btn-outline-success my-2 my-sm-0" name="searchBtn" value="Search" />
                 <div class="form-check form-check-inline" style="margin-left: 10px;">
-                    <input class="form-check-input" type="radio" name="searchReq" id="searchByName" value="searchByName" checked>
+                    <input class="form-check-input" type="radio" name="searchReq" id="searchByName" value="searchByName" <% if(selectedSearchReq.equalsIgnoreCase("searchByName") || selectedSearchReq.equals("")) out.print("checked"); %>>
                     <label class="form-check-label" for="searchByName">Name</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="searchReq" id="searchByBatch" value="searchByBatch">
+                    <input class="form-check-input" type="radio" name="searchReq" id="searchByBatch" value="searchByBatch" <% if(selectedSearchReq.equalsIgnoreCase("searchByBatch")) out.print("checked"); %>>
                     <label class="form-check-label" for="searchByBatch">Batch</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="searchReq" id="searchByLocationInState" value="searchByLocationInState">
+                    <input class="form-check-input" type="radio" name="searchReq" id="searchByLocationInState" value="searchByLocationInState" <% if(selectedSearchReq.equalsIgnoreCase("searchByLocationInState")) out.print("checked"); %>>
                     <label class="form-check-label" for="searchByLocationInState">Location (State)</label>
                 </div>
             </form> 
