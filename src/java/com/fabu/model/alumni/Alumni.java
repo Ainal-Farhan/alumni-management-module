@@ -5,12 +5,14 @@
  */
 package com.fabu.model.alumni;
 
+import com.fabu.model.user.User;
+
 /**
  * @author PC
  * @version 1.0
  * @created 27-Dec-2020 9:28:30 PM
  */
-public class Alumni {
+public class Alumni extends User{
 
     private String alumniAddress1;
     private String alumniAddress2;
@@ -23,20 +25,15 @@ public class Alumni {
     private String alumniCurJob;
     private double alumniCurSalary;
     private String alumniDegree;
-    private String alumniEmail;
     private String alumniFieldOfSpecialization;
     private int alumniGraduateYear;
-    private String alumniID;
-    private String alumniName;
-    private String alumniPhoneNumber;
+    private int alumniID;
     private String alumniPrevEmployer;
     private String alumniPrevJob;
     private double alumniPrevSalary;
     private String alumniProfilePicture;
     private String alumniProfStatus;
     private int alumniProfStatusYearGained;
-    private String alumniUsername;
-    private String alumniUserPassword;
     private String employerAddress1;
     private String employerAddress2;
     private String employerAddressCity;
@@ -48,12 +45,7 @@ public class Alumni {
 
     // Get Alumni Personal Information
     
-    public String getAlumniUsername(){  return this.alumniUsername; }
-    public String getAlumniPassword(){  return this.alumniUserPassword; }
-    
-    public String getAlumniID(){    return this.alumniID; }
-    public String getAlumniName(){  return this.alumniName; }
-    public String getAlumniPhoneNumber(){   return this.alumniPhoneNumber; }
+    public int getAlumniID(){    return this.alumniID; }
     public String getAlumniProfilePicture(){    return this.alumniProfilePicture; }
     public String getAlumniProfStatus(){    return this.alumniProfStatus; }
     public int getAlumniProfStatusYearGained(){ return this.alumniProfStatusYearGained; }
@@ -68,7 +60,6 @@ public class Alumni {
     // Get Alumni Educational Information
     public int getAlumniBatch(){    return this.alumniBatch; }
     public String getAlumniDegree(){    return this.alumniDegree; }
-    public String getAlumniEmail(){ return this.alumniEmail; }
     public String getAlumniFieldOfSpecialization(){ return this.alumniFieldOfSpecialization; }
     public int getAlumniGraduateYear(){ return this.alumniGraduateYear; }
     
@@ -142,16 +133,6 @@ public class Alumni {
 
     /**
      *
-     * @param username
-     * @param password
-     */
-    public void setAlumniLoginCredentials(String username, String password){
-        this.alumniUsername = username;
-        this.alumniUserPassword = password;
-    }
-
-    /**
-     *
      * @param alumniID
      * @param alumniProfStatus
      * @param alumniProfStatusYearGained
@@ -160,14 +141,10 @@ public class Alumni {
      * @param alumniPhoneNumber
      * @param alumniProfilePicture
      */
-    public void setAlumniPersonalInfo(String alumniID, String alumniProfStatus, int alumniProfStatusYearGained, 
-            String alumniName, String alumniEmail, String alumniPhoneNumber, String alumniProfilePicture){
+    public void setAlumniPersonalInfo(int alumniID, String alumniProfStatus, int alumniProfStatusYearGained, String alumniProfilePicture){
         this.alumniID = alumniID;
         this.alumniProfStatus = alumniProfStatus;
         this.alumniProfStatusYearGained = alumniProfStatusYearGained;
-        this.alumniName = alumniName;
-        this.alumniEmail = alumniEmail;
-        this.alumniPhoneNumber = alumniPhoneNumber;
         this.alumniProfilePicture = alumniProfilePicture;
     }
 

@@ -56,6 +56,14 @@
                                 </tr>
                                 <tr>
                                     <th>
+                                        <label>Email</label>
+                                    </th>
+                                    <td>
+                                        <input type="email" class="form-control-plaintext" value="<% out.print(request.getAttribute("email")); %>" readonly>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
                                         <label>Professional Status</label>
                                     </th>
                                     <td>
@@ -177,14 +185,6 @@
                                 </th>
                                 <td>
                                     <input type="number" min="1999" max="2999" class="form-control-plaintext" value="<% out.print(request.getAttribute("graduateYear")); %>" readonly>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <label>Email</label>
-                                </th>
-                                <td>
-                                    <input type="email" class="form-control-plaintext" value="<% out.print(request.getAttribute("email")); %>" readonly>
                                 </td>
                             </tr>
                         </tbody>

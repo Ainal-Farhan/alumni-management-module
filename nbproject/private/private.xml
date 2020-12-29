@@ -2,6 +2,11 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/D:/GitHub/alumni-management-module/web/index.jsp</file>
+            <file>file:/D:/GitHub/alumni-management-module/web/WEB-INF/jsp/views/viewAlumniListInfoPage.jsp</file>
+            <file>file:/D:/GitHub/alumni-management-module/web/WEB-INF/jsp/components/pagination.jsp</file>
+            <file>file:/D:/GitHub/alumni-management-module/src/java/com/fabu/controller/alumni/AlumniServlet.java</file>
+        </group>
     </open-files>
 </project-private>

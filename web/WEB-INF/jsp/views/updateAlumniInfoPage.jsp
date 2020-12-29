@@ -70,7 +70,7 @@
                                         <label>Name</label>
                                     </th>
                                     <td>
-                                        <input type="text" name="updatedAlumniName" class="form-control" value="<% out.print(request.getAttribute("name")); %>">
+                                        <input type="text" name="updatedAlumniName" class="form-control-plaintext" value="<% out.print(request.getAttribute("name")); %>" readonly>
                                     </td>
                                 </tr>
                                 <tr>
@@ -78,7 +78,15 @@
                                         <label>Phone Number</label>
                                     </th>
                                     <td>
-                                        <input type="text" name="updatedAlumniPhoneNumber" class="form-control" value="<% out.print(request.getAttribute("phoneNumber")); %>">
+                                        <input type="text" name="updatedAlumniPhoneNumber" class="form-control-plaintext" value="<% out.print(request.getAttribute("phoneNumber")); %>" readonly>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <label>Email</label>
+                                    </th>
+                                    <td>
+                                        <input type="email" class="form-control-plaintext" value="<% out.print(request.getAttribute("email")); %>" readonly>
                                     </td>
                                 </tr>
                                 <tr>
@@ -204,14 +212,6 @@
                                 </th>
                                 <td>
                                     <input type="number" min="1999" max="2999" name="updatedAlumniGraduateYear" class="form-control" value="<% out.print(request.getAttribute("graduateYear")); %>">
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <label>Email</label>
-                                </th>
-                                <td>
-                                    <input type="email" class="form-control" name="updatedAlumniEmail" value="<% out.print(request.getAttribute("email")); %>">
                                 </td>
                             </tr>
                         </tbody>

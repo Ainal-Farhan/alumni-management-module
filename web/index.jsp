@@ -9,10 +9,7 @@
 <%  session.setAttribute("currentUserType", "admin"); %>
 <%  //session.setAttribute("currentUserType", "staff"); %>
 <%  //session.setAttribute("currentUserType", "alumni"); %>
-<%  //session.setAttribute("currentAlumniID", "A18CS0921"); %>
-
-// This is some changes...
-
+<%  //session.setAttribute("currentAlumniID", "1"); %>
 
 <!DOCTYPE html>
 <html>

@@ -6,6 +6,7 @@
 package com.fabu.controller.alumni;
 
 import com.fabu.model.alumni.Alumni;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -33,8 +34,10 @@ import javax.servlet.http.HttpSession;
 public class AlumniServlet extends HttpServlet {
     
     private static ArrayList<Alumni> alumniList;
-    private static int totalAlumni = 0;
+    
     private static Alumni currentAlumni;
+    
+    private static int totalAlumni = 0;
     
     private static int totalPages;
     private final int TOTAL_ALUMNI_PER_PAGE = 10;
@@ -45,8 +48,8 @@ public class AlumniServlet extends HttpServlet {
 
     // We initialize static variables inside a static block.
     static {
-        ascAlumniName = (Alumni alumni1, Alumni alumni2) -> alumni1.getAlumniName().compareTo(alumni2.getAlumniName());
-        descAlumniName = (Alumni alumni1, Alumni alumni2) -> alumni2.getAlumniName().compareTo(alumni1.getAlumniName());
+        ascAlumniName = (Alumni alumni1, Alumni alumni2) -> alumni1.getName().compareTo(alumni2.getName());
+        descAlumniName = (Alumni alumni1, Alumni alumni2) -> alumni2.getName().compareTo(alumni1.getName());
     }
             
     /**
@@ -203,13 +206,13 @@ public class AlumniServlet extends HttpServlet {
         ArrayList<Alumni> searchResults = new ArrayList<Alumni>();
         
         for(int i = 0; i < totalAlumni; i++) {
-            if(alumniList.get(i).getAlumniName().toUpperCase().contains(searchInfo.toUpperCase())) {
+            if(alumniList.get(i).getName().toUpperCase().contains(searchInfo.toUpperCase())) {
                 searchResults.add(alumniList.get(i));
             }
         }
         
-        alumniList = new ArrayList<Alumni>();
         alumniList = searchResults;
+        
         totalAlumni = searchResults.size();
         totalPages = totalAlumni / TOTAL_ALUMNI_PER_PAGE;
             
@@ -228,8 +231,8 @@ public class AlumniServlet extends HttpServlet {
             }
         }
         
-        alumniList = new ArrayList<Alumni>();
         alumniList = searchResults;
+        
         totalAlumni = searchResults.size();
         totalPages = totalAlumni / TOTAL_ALUMNI_PER_PAGE;
             
@@ -248,8 +251,8 @@ public class AlumniServlet extends HttpServlet {
             }
         }
         
-        alumniList = new ArrayList<Alumni>();
         alumniList = searchResults;
+        
         totalAlumni = searchResults.size();
         totalPages = totalAlumni / TOTAL_ALUMNI_PER_PAGE;
             
@@ -262,27 +265,32 @@ public class AlumniServlet extends HttpServlet {
     private boolean deleteAlumniAccountFromDatabase(HttpServletRequest request, HttpServletResponse response) {
         boolean status = false;
         try {
-            String currentAlumniID = currentAlumni.getAlumniID();
+            int currentAlumniID = currentAlumni.getAlumniID();
             
             Connection con = getCon();
             
-            String statementQuery = "DELETE FROM `Alumni` WHERE `Alumni`.`alumniID` LIKE ?";
-            PreparedStatement statement = con.prepareStatement(statementQuery);
+            String statementQuery1 = "DELETE FROM `alumni` WHERE `alumni`.`alumniID` = ?";
+            String statementQuery2 = "DELETE FROM `user` WHERE `user`.`id` = ?";
             
-            statement.setString(1, currentAlumniID);
+            PreparedStatement statement1 = con.prepareStatement(statementQuery1);
+            PreparedStatement statement2 = con.prepareStatement(statementQuery2);
             
-            int result = statement.executeUpdate();
+            statement1.setInt(1, currentAlumniID);
+            statement2.setInt(1, currentAlumniID);
             
-            if(result == 0) {
+            int result1 = statement1.executeUpdate();
+            int result2 = statement2.executeUpdate();
+            
+            if(result1 == 0 || result2 == 0) {
                 status = false;
             }
-            else if(result > 0) {
+            else if(result1 > 0 && result2 > 0) {
                 status = true;
             }
             
             if(status) {                
                 for(int i = 0; i < totalAlumni; i++) {
-                    if(alumniList.get(i).getAlumniID().equals(currentAlumniID)) {
+                    if(alumniList.get(i).getAlumniID() == currentAlumniID) {
                         alumniList.remove(i);
                         break;
                     }
@@ -308,7 +316,7 @@ public class AlumniServlet extends HttpServlet {
         
         Arrays.sort(alumniArray, ascAlumniName);
         
-        for(int i = 0; i < totalAlumni; i++) {
+        for(int i = 0; i < totalAlumni; i++) { 
             alumniList.set(i, alumniArray[i]);
         }
     }
@@ -322,56 +330,42 @@ public class AlumniServlet extends HttpServlet {
         
         Arrays.sort(alumniArray, descAlumniName);
         
-        for(int i = 0; i < totalAlumni; i++) {
+        for(int i = 0; i < totalAlumni; i++) { 
             alumniList.set(i, alumniArray[i]);
         }
     }
     
     private boolean setCurrentAlumni(HttpServletRequest request, HttpServletResponse response) {
-        currentAlumni = null;
-        boolean status = false;
-        try {
-            Connection con = getCon();
-            
+        if(getAllAlumniInfoFromDatabase()) {
+            currentAlumni = null;
+
+            boolean status = false;
+
             HttpSession session = request.getSession();
-            String currentAlumniID = (String)session.getAttribute("currentAlumniID");
-            
-            String statementQuery = "SELECT * FROM `Alumni` WHERE `Alumni`.`alumniID` IN (?);";
-            
-            PreparedStatement statement = con.prepareStatement(statementQuery);
-            statement.setString(1, currentAlumniID);
-            
-            boolean result = statement.execute();
-            
-            if(result) {
-                status = true;
-                for(int i = 0; i < totalAlumni; i++) {
-                    if(currentAlumniID.equals(alumniList.get(i).getAlumniID())) {
-                        currentAlumni = alumniList.get(i);
-                        break;
-                    }
+            int currentAlumniID = Integer.parseInt((String)session.getAttribute("currentAlumniID"));
+
+            for(int i = 0; i < totalAlumni; i++) {
+                if(currentAlumniID == alumniList.get(i).getAlumniID()) {
+                    currentAlumni = alumniList.get(i);
+                    status = true;
+                    break;
                 }
-            }else {
                 status = false;
-            }            
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(AlumniServlet.class.getName()).log(Level.SEVERE, null, ex);
-            status = false;
-        } finally {
+            }
+
             return status;
         }
+        
+        else
+            return false;
     }
     
     private boolean saveUpdatedInfoIntoDatabase(HttpServletRequest request, HttpServletResponse response) {
         boolean status = false;
         try {
-            String currentAlumniID = currentAlumni.getAlumniID();
-            String currentAlumniUsername = currentAlumni.getAlumniUsername();
-            String currentAlumniPassword = currentAlumni.getAlumniPassword();
+            int currentAlumniID = currentAlumni.getAlumniID();
             
             String updatedPictureName = request.getParameter("updatedPictureName");
-            String updatedAlumniName = request.getParameter("updatedAlumniName");
-            String updatedAlumniPhoneNumber = request.getParameter("updatedAlumniPhoneNumber");
             String updatedAlumniProfStatus = request.getParameter("updatedAlumniProfStatus");
             int updatedAlumniProfStatusGainedYear = Integer.parseInt(request.getParameter("updatedAlumniProfStatusGainedYear"));
 
@@ -386,7 +380,6 @@ public class AlumniServlet extends HttpServlet {
             String updatedAlumniDegree = request.getParameter("updatedAlumniDegree");
             int updatedAlumniBatch = Integer.parseInt(request.getParameter("updatedAlumniBatch"));
             int updatedAlumniGraduateYear = Integer.parseInt(request.getParameter("updatedAlumniGraduateYear"));
-            String updatedAlumniEmail = request.getParameter("updatedAlumniEmail");
 
             String updatedAlumniCurJob = request.getParameter("updatedAlumniCurJob");
             String updatedAlumniPrevJob = request.getParameter("updatedAlumniPrevJob");
@@ -404,7 +397,7 @@ public class AlumniServlet extends HttpServlet {
             
             Connection con = getCon();
             
-            String statementQuery = "UPDATE `alumni` SET `alumniAddress1` = ?, `alumniAddress2` = ?, `alumniAddressCity` = ?, `alumniAddressCountry` = ?, `alumniAddressPostCode` = ?, `alumniAddressState` = ?, `alumniBatch` = ?, `alumniCurEmployer` = ?, `alumniCurJob` = ?, `alumniCurSalary` = ?, `alumniDegree` = ?, `alumniEmail` = ?, `alumniFieldOfSpecialization` = ?, `alumniGraduateYear` = ?, `alumniName` = ?, `alumniPhoneNumber` = ?, `alumniPrevEmployer` = ?, `alumniPrevJob` = ?, `alumniPrevSalary` = ?, `alumniProfilePicture` = ?, `alumniProfStatus` = ?, `alumniProfStatusYearGained` = ?, `alumniUsername` = ?, `alumniUserPassword` = ?, `employerAddress1` = ?, `employerAddress2` = ?, `employerAddressCity` = ?, `employerAddressCountry` = ?, `employerAddressPostCode` = ?, `employerAddressState` = ? WHERE `alumni`.`alumniID` = ?;";
+            String statementQuery = "UPDATE `alumni` SET `alumniAddress1` = ?, `alumniAddress2` = ?, `alumniAddressCity` = ?, `alumniAddressCountry` = ?, `alumniAddressPostCode` = ?, `alumniAddressState` = ?, `alumniBatch` = ?, `alumniCurEmployer` = ?, `alumniCurJob` = ?, `alumniCurSalary` = ?, `alumniDegree` = ?, `alumniFieldOfSpecialization` = ?, `alumniGraduateYear` = ?, `alumniPrevEmployer` = ?, `alumniPrevJob` = ?, `alumniPrevSalary` = ?, `alumniProfilePicture` = ?, `alumniProfStatus` = ?, `alumniProfStatusYearGained` = ?, `employerAddress1` = ?, `employerAddress2` = ?, `employerAddressCity` = ?, `employerAddressCountry` = ?, `employerAddressPostCode` = ?, `employerAddressState` = ? WHERE `alumni`.`alumniID` = ?;";
             PreparedStatement statement = con.prepareStatement(statementQuery);
             
             statement.setString(1, updatedAlumniAddress1);
@@ -418,26 +411,21 @@ public class AlumniServlet extends HttpServlet {
             statement.setString(9, updatedAlumniCurJob);
             statement.setDouble(10, updatedAlumniCurSalary);
             statement.setString(11, updatedAlumniDegree);
-            statement.setString(12, updatedAlumniEmail);
-            statement.setString(13, updatedAlumniFieldOfSpecialization);
-            statement.setInt(14, updatedAlumniGraduateYear);
-            statement.setString(15, updatedAlumniName);
-            statement.setString(16, updatedAlumniPhoneNumber);
-            statement.setString(17, updatedAlumniPrevEmployer);
-            statement.setString(18, updatedAlumniPrevJob);
-            statement.setDouble(19, updatedAlumniPrevSalary);
-            statement.setString(20, updatedPictureName);
-            statement.setString(21, updatedAlumniProfStatus);
-            statement.setInt(22, updatedAlumniProfStatusGainedYear);
-            statement.setString(23, currentAlumniUsername);
-            statement.setString(24, currentAlumniPassword);
-            statement.setString(25, updatedEmployerAddress1);
-            statement.setString(26, updatedEmployerAddress2);
-            statement.setString(27, updatedEmployerAddressCity);
-            statement.setString(28, updatedEmployerAddressCountry);
-            statement.setString(29, updatedEmployerAddressPostCode);
-            statement.setString(30, updatedEmployerAddressState);
-            statement.setString(31, currentAlumniID);
+            statement.setString(12, updatedAlumniFieldOfSpecialization);
+            statement.setInt(13, updatedAlumniGraduateYear);
+            statement.setString(14, updatedAlumniPrevEmployer);
+            statement.setString(15, updatedAlumniPrevJob);
+            statement.setDouble(16, updatedAlumniPrevSalary);
+            statement.setString(17, updatedPictureName);
+            statement.setString(18, updatedAlumniProfStatus);
+            statement.setInt(19, updatedAlumniProfStatusGainedYear);
+            statement.setString(20, updatedEmployerAddress1);
+            statement.setString(21, updatedEmployerAddress2);
+            statement.setString(22, updatedEmployerAddressCity);
+            statement.setString(23, updatedEmployerAddressCountry);
+            statement.setString(24, updatedEmployerAddressPostCode);
+            statement.setString(25, updatedEmployerAddressState);
+            statement.setInt(26, currentAlumniID);
             
             int result = statement.executeUpdate();
             
@@ -449,9 +437,9 @@ public class AlumniServlet extends HttpServlet {
             }
             
             if(status) {                
-                currentAlumni.setAlumniLoginCredentials(currentAlumniUsername, currentAlumniPassword);
-                currentAlumni.setAlumniPersonalInfo(currentAlumniID, updatedAlumniProfStatus, updatedAlumniProfStatusGainedYear, 
-                        updatedAlumniName, updatedAlumniEmail, updatedAlumniPhoneNumber, updatedPictureName);
+                currentAlumni.setAlumniPersonalInfo(currentAlumniID, updatedAlumniProfStatus, 
+                        updatedAlumniProfStatusGainedYear, updatedPictureName);
+                
                 currentAlumni.setAlumniAddress(updatedAlumniAddress1, updatedAlumniAddress2, updatedAlumniAddressCity, 
                         updatedAlumniAddressPostCode, updatedAlumniAddressState, updatedAlumniAddressCountry);
                 
@@ -459,11 +447,12 @@ public class AlumniServlet extends HttpServlet {
                 
                 currentAlumni.setAlumniEmploymentInfo(updatedAlumniPrevJob, updatedAlumniPrevSalary, updatedAlumniCurJob, updatedAlumniCurSalary, 
                         updatedAlumniPrevEmployer, updatedAlumniCurEmployer);
+                
                 currentAlumni.setEmployerAddress(updatedEmployerAddress1, updatedEmployerAddress2, updatedEmployerAddressCity, 
                         updatedEmployerAddressPostCode, updatedEmployerAddressState, updatedEmployerAddressCountry);
                 
                 for(int i = 0; i < totalAlumni; i++) {
-                    if(alumniList.get(i).getAlumniID().equals(currentAlumniID)) {
+                    if(alumniList.get(i).getAlumniID() == currentAlumniID) {
                         alumniList.set(i, currentAlumni);
                         break;
                     }
@@ -498,10 +487,10 @@ public class AlumniServlet extends HttpServlet {
     
     private void processManageSelectedAlumniInfo(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String selectedAlumniID = request.getParameter("selectedAlumniID");
+        int selectedAlumniID = Integer.parseInt(request.getParameter("selectedAlumniID"));
                 
         for(int i = 0; i < totalAlumni; i++) {
-            if(alumniList.get(i).getAlumniID().equals(selectedAlumniID)) {
+            if(alumniList.get(i).getAlumniID() == selectedAlumniID) {
                 currentAlumni = alumniList.get(i);
                 break;
             }
@@ -527,13 +516,10 @@ public class AlumniServlet extends HttpServlet {
     }
     
     private void setAttributesForCurrentAlumni(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        request.setAttribute("username", currentAlumni.getAlumniUsername());
-        request.setAttribute("password", currentAlumni.getAlumniPassword());
-        
+            throws ServletException, IOException {        
         request.setAttribute("id", currentAlumni.getAlumniID());
-        request.setAttribute("name", currentAlumni.getAlumniName());
-        request.setAttribute("phoneNumber", currentAlumni.getAlumniPhoneNumber());
+        request.setAttribute("name", currentAlumni.getName());
+        request.setAttribute("phoneNumber", currentAlumni.getPhone());
         request.setAttribute("profilePicture", currentAlumni.getAlumniProfilePicture());
         request.setAttribute("profStatus", currentAlumni.getAlumniProfStatus());
         request.setAttribute("profStatusYearGained", currentAlumni.getAlumniProfStatusYearGained());
@@ -547,7 +533,7 @@ public class AlumniServlet extends HttpServlet {
         
         request.setAttribute("batch", currentAlumni.getAlumniBatch());
         request.setAttribute("degree", currentAlumni.getAlumniDegree());
-        request.setAttribute("email", currentAlumni.getAlumniEmail());
+        request.setAttribute("email", currentAlumni.getEmail());
         request.setAttribute("fieldOfSpecialization", currentAlumni.getAlumniFieldOfSpecialization());
         request.setAttribute("graduateYear", currentAlumni.getAlumniGraduateYear());
         
@@ -594,9 +580,9 @@ public class AlumniServlet extends HttpServlet {
                 continue;
             }
             
-            alumniID[i] = alumniList.get(j).getAlumniID();
-            alumniName[i] = alumniList.get(j).getAlumniName();
-            alumniEmail[i] = alumniList.get(j).getAlumniEmail();
+            alumniID[i] = Integer.toString(alumniList.get(j).getAlumniID());
+            alumniName[i] = alumniList.get(j).getName();
+            alumniEmail[i] = alumniList.get(j).getEmail();
             alumniState[i] = alumniList.get(j).getAlumniAddressState();
             alumniGraduationYear[i] = Integer.toString(alumniList.get(j).getAlumniGraduateYear());
             alumniBatch[i] = Integer.toString(alumniList.get(j).getAlumniBatch());
@@ -664,30 +650,49 @@ public class AlumniServlet extends HttpServlet {
     
     private boolean getAllAlumniInfoFromDatabase() {
         alumniList = new ArrayList<Alumni>();
+        
         boolean status = false;
         try {
             Connection con = getCon();
             
-            String statementQuery = "SELECT * FROM Alumni";
+            String statementQuery1 = "SELECT * FROM Alumni";
             
-            Statement statement = con.createStatement();
-            ResultSet result = statement.executeQuery(statementQuery);
+            Statement statement1 = con.createStatement();
+            ResultSet result1 = statement1.executeQuery(statementQuery1);
             
-            while(result.next()) {
+            String statementQuery2 = "SELECT * FROM user WHERE role = 'alumni';";
+            
+            Statement statement2 = con.createStatement();
+            ResultSet result2 = statement2.executeQuery(statementQuery2);
+            
+            while(result1.next() && result2.next()) {
                 Alumni alumni = new Alumni();
                 
-                alumni.setAlumniLoginCredentials(result.getString("alumniUsername"), result.getString("alumniUserPassword"));
-                alumni.setAlumniPersonalInfo(result.getString("alumniID"), result.getString("alumniProfStatus"), result.getInt("alumniProfStatusYearGained"), 
-                        result.getString("alumniName"), result.getString("alumniEmail"), result.getString("alumniPhoneNumber"), result.getString("alumniProfilePicture"));
-                alumni.setAlumniAddress(result.getString("alumniAddress1"), result.getString("alumniAddress2"), result.getString("alumniAddressCity"), 
-                        result.getString("alumniAddressPostCode"), result.getString("alumniAddressState"), result.getString("alumniAddressCountry"));
+                alumni.setId(result2.getInt("id"));
+                alumni.setName(result2.getString("name"));
+                alumni.setPhone(result2.getString("phone"));
+                alumni.setEmail(result2.getString("email"));
+                alumni.setRole(result2.getString("role"));
+                alumni.setPassword(result2.getString("password"));
+                alumni.setCreatedAt(result2.getDate("created_at"));
                 
-                alumni.setAlumniEducationalInfo(result.getInt("alumniGraduateYear"), result.getString("alumniDegree"), result.getString("alumniFieldOfSpecialization"), result.getInt("alumniBatch"));
+                alumni.setAlumniPersonalInfo(result1.getInt("alumniID"), result1.getString("alumniProfStatus"), 
+                        result1.getInt("alumniProfStatusYearGained"), result1.getString("alumniProfilePicture"));
                 
-                alumni.setAlumniEmploymentInfo(result.getString("alumniPrevJob"), result.getDouble("alumniPrevSalary"), result.getString("alumniCurJob"), result.getDouble("alumniCurSalary"), 
-                        result.getString("alumniPrevEmployer"), result.getString("alumniCurEmployer"));
-                alumni.setEmployerAddress(result.getString("employerAddress1"), result.getString("employerAddress2"), result.getString("employerAddressCity"), 
-                        result.getString("employerAddressPostCode"), result.getString("employerAddressState"), result.getString("employerAddressCountry"));
+                alumni.setAlumniAddress(result1.getString("alumniAddress1"), result1.getString("alumniAddress2"), 
+                        result1.getString("alumniAddressCity"), result1.getString("alumniAddressPostCode"), 
+                        result1.getString("alumniAddressState"), result1.getString("alumniAddressCountry"));
+                
+                alumni.setAlumniEducationalInfo(result1.getInt("alumniGraduateYear"), result1.getString("alumniDegree"), 
+                        result1.getString("alumniFieldOfSpecialization"), result1.getInt("alumniBatch"));
+                
+                alumni.setAlumniEmploymentInfo(result1.getString("alumniPrevJob"), result1.getDouble("alumniPrevSalary"), 
+                        result1.getString("alumniCurJob"), result1.getDouble("alumniCurSalary"), 
+                        result1.getString("alumniPrevEmployer"), result1.getString("alumniCurEmployer"));
+                
+                alumni.setEmployerAddress(result1.getString("employerAddress1"), result1.getString("employerAddress2"), 
+                        result1.getString("employerAddressCity"), result1.getString("employerAddressPostCode"), 
+                        result1.getString("employerAddressState"), result1.getString("employerAddressCountry"));
                 
                 alumniList.add(alumni);
                 status = true;
