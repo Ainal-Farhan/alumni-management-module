@@ -82,7 +82,7 @@ public class AlumniServlet extends HttpServlet {
                 }
             }
             else if(requestType.equalsIgnoreCase("manageAlumnusAlumnaInfo")) {
-                if(setCurrentAlumni(request, response)) {
+                if(setCurrentAlumni(request)) {
                     viewManageInfoPage(request, response);
                 }
                 else {
@@ -125,6 +125,7 @@ public class AlumniServlet extends HttpServlet {
                 
                 if(btnYesSelected != null) {
                     deleteAlumniAccountFromDatabase(request, response);
+                    processViewAlumniList(request, response);
                 }
                 else if(btnNoSelected != null) {
                     viewManageInfoPage(request, response);
@@ -297,7 +298,6 @@ public class AlumniServlet extends HttpServlet {
                 }
                 currentAlumni = null;
                 --totalAlumni;
-                processViewAlumniList(request, response);
             }            
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(AlumniServlet.class.getName()).log(Level.SEVERE, null, ex);
@@ -335,7 +335,7 @@ public class AlumniServlet extends HttpServlet {
         }
     }
     
-    private boolean setCurrentAlumni(HttpServletRequest request, HttpServletResponse response) {
+    private boolean setCurrentAlumni(HttpServletRequest request) {
         if(getAllAlumniInfoFromDatabase()) {
             currentAlumni = null;
 
@@ -468,9 +468,7 @@ public class AlumniServlet extends HttpServlet {
     }
     
     private void processViewUpdateAlumniInfoPage(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        getAllAlumniInfoFromDatabase();
-        
+            throws ServletException, IOException {        
         setAttributesForCurrentAlumni(request, response);
         
         RequestDispatcher dispatcher = getServletConfig().getServletContext().getRequestDispatcher("/WEB-INF/jsp/views/updateAlumniInfoPage.jsp");
