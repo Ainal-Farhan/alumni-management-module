@@ -15,38 +15,63 @@
         <%@include file="../components/navigationBar.jsp" %>
         
         <div style="width:90%;display:block;margin-right:auto;margin-left:auto;margin-top: 10px;margin-bottom: 10px;">
+            <form action="AlumniServlet?requestType=updateAlumniProfilePicture" method="POST" enctype="multipart/form-data" onSubmit="return checkEitherImageIsSelected()">
+                <img id="profilePicture" src="http://alumni-module.herokuapp.com/assets/img/profile/alumni/<%= request.getAttribute("profilePicture") %>" class="mx-auto d-block" width="350" height="350" style="margin-top:10px;margin-bottom:10px;border-radius: 50%;">
+                <span id="fileSelected"> Selected Image: None</span>
+                
+                <input type="file" name="selectedImage" class="form-control-file" accept="image/*" id="fileName" accept=".jpg,.jpeg,.png" onchange="validateFileType(event)" style="display:none;">
+                <label for="fileName" class="btn btn-primary">Browse</label>
+                
+                <input type="submit" class="btn btn-primary" value="Upload" style="margin-bottom: 8px;">
+                <%  if(!((String)request.getAttribute("profilePicture")).equalsIgnoreCase("default.png")) { %>
+                <input type="submit" class="btn btn-primary" value="Remove" name="remove-btn" style="margin-bottom: 8px;" onClick="toDefault()">
+                <%  } %>
+            </form>
+                
+            <script type="text/javascript">
+                var statusUpload = false;
+                
+                function validateFileType(event){
+                    var fileName = document.getElementById("fileName").value;
+                    fileName = fileName.replace(/.*[\/\\]/, '');
+                    var idxDot = fileName.lastIndexOf(".") + 1;
+                    var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+                    if (extFile=="jpg" || extFile=="jpeg" || extFile=="png"){
+                        document.getElementById('fileSelected').innerHTML = " Selected Image: " + fileName;
+
+                        var reader = new FileReader();
+                        reader.onload = function(){
+                          var output = document.getElementById('profilePicture');
+                          output.src = reader.result;
+                        };
+                        reader.readAsDataURL(event.target.files[0]);
+                        
+                    }else{
+                        document.getElementById('fileSelected').innerHTML = " Selected Image: None";
+                        alert("Only jpg/jpeg and png files are allowed!");
+                    }   
+                }
+                
+                function toDefault() {
+                    statusUpload = true;
+                }
+                
+                function checkEitherImageIsSelected() {
+                    if(document.getElementById('fileName').value !== "") {
+                        return true;
+                    }
+                    if(statusUpload) {
+                        return true;
+                    }
+                    else {
+                        alert("No image was selected.");
+                    }
+                    return false;
+                }
+            </script>
+            
             <form action="AlumniServlet" method="POST">                
                 <div class="form-group row">
-                    <div class="col">
-                        <div class="form-group">
-                            <img id="profilePicture" src="/alumni-management-module/assets/img/profile/alumni/<% out.print(request.getAttribute("profilePicture")); %>" class="mx-auto d-block" width="350" height="350" style="margin-top:10px;margin-bottom:10px;border-radius: 50%;">
-                            <label for="fileName" class="btn btn-primary">Upload Image</label><span id="fileSelected"> Selected Image: None</span>
-                            <input name="image" class="form-control-file" type="file" accept="image/*" id="fileName" accept=".jpg,.jpeg,.png" onchange="validateFileType(event)" style="display:none;"/>
-                            <input type="hidden" id="profilePictureName" name="updatedPictureName" value="<% out.print(request.getAttribute("profilePicture")); %>">
-                            <script type="text/javascript">
-                                function validateFileType(event){
-                                    var fileName = document.getElementById("fileName").value;
-                                    fileName = fileName.replace(/.*[\/\\]/, '');
-                                    var idxDot = fileName.lastIndexOf(".") + 1;
-                                    var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
-                                    if (extFile=="jpg" || extFile=="jpeg" || extFile=="png"){
-                                        document.getElementById('fileSelected').innerHTML = " Selected Image: " + fileName;
-                                        document.getElementById('profilePictureName').value = "<% out.print(request.getAttribute("id")); %>_" + fileName;
-                                        
-                                        var reader = new FileReader();
-                                        reader.onload = function(){
-                                          var output = document.getElementById('profilePicture');
-                                          output.src = reader.result;
-                                        };
-                                        reader.readAsDataURL(event.target.files[0]);
-                                    }else{
-                                        document.getElementById('fileSelected').innerHTML = " Selected Image: None";
-                                        alert("Only jpg/jpeg and png files are allowed!");
-                                    }   
-                                }
-                            </script>
-                        </div>
-                    </div>
                     <div class="col">
                         <table class="table table-striped">
                             <thead class="thead-dark">

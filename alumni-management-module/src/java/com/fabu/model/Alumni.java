@@ -6,13 +6,14 @@
 package com.fabu.model;
 
 import com.fabu.model.User;
+import java.io.Serializable;
 
 /**
  * @author PC
  * @version 1.0
  * @created 27-Dec-2020 9:28:30 PM
  */
-public class Alumni extends User{
+public class Alumni extends User implements Serializable{
 
     private String alumniAddress1;
     private String alumniAddress2;

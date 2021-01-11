@@ -7,9 +7,14 @@ package com.fabu.controller.alumni;
 
 import com.fabu.model.Alumni;
 import com.google.gson.Gson;
+import java.io.File;
+import java.io.FileOutputStream;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.lang.ClassNotFoundException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -19,24 +24,24 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 /**
  *
  * @author PC
  */
 @WebServlet("/mobile-api/alumniList")
+@MultipartConfig
 public class AlumniServlet extends HttpServlet {
     
     private static ArrayList<Alumni> alumniList;
@@ -49,8 +54,8 @@ public class AlumniServlet extends HttpServlet {
     private final int TOTAL_ALUMNI_PER_PAGE = 10;
     private static int currentPage = 1;
     
-    private static Comparator<Alumni> ascAlumniName;
-    private static Comparator<Alumni> descAlumniName;
+    private static final Comparator<Alumni> ascAlumniName;
+    private static final Comparator<Alumni> descAlumniName;
 
     // We initialize static variables inside a static block.
     static {
@@ -77,7 +82,10 @@ public class AlumniServlet extends HttpServlet {
             
             String requestType = request.getParameter("requestType");
             
-            if(requestType.equalsIgnoreCase("viewAlumniList")) {
+            if(requestType == null) {
+                out.println("<script>alert('requestType is null');</script>");
+            }
+            else if(requestType.equalsIgnoreCase("viewAlumniList")) {
                 if(getAllAlumniInfoFromDatabase()) {
                     sortAlumniByNameAscendingOrder();
                     goToFirstPage();
@@ -86,6 +94,69 @@ public class AlumniServlet extends HttpServlet {
                 else {
                     out.println("<script>alert('Error Happen when retrieving all of the alumni information from database');</script>");
                 }
+            }
+            else if(requestType.equalsIgnoreCase("updateAlumniProfilePicture")) {
+//                final String path = request.getSession().getServletContext().getRealPath("/") + "assets\\img\\profile\\alumni";
+//                
+//                if(request.getPart("remove-btn") != null) {
+//                    String defaultImageName = "default.png";
+//                    
+//                    saveUpdatedProfilePictureIntoDatabase(defaultImageName);
+//                
+//                    Logger.getLogger(AlumniServlet.class.getName()).log(Level.INFO, "File {0} being uploaded to {1}", 
+//                            new Object[]{defaultImageName, path});
+//
+//                    processViewUpdateAlumniInfoPage(request, response);
+//                
+//                    return;
+//                }
+//                
+//                final Part imageFilePart = request.getPart("selectedImage");
+//                String fileName = getFileName(imageFilePart);
+//                String extension = "";
+//                
+//                OutputStream outFile = null;
+//                InputStream filecontent = null;
+//                
+//                if(fileName.substring(fileName.length() - 5, fileName.length() - 4).equals(".")) {
+//                    if(fileName.substring(fileName.length() - 5).equalsIgnoreCase(".jpeg")) {
+//                        extension = ".jpeg";
+//                    }
+//                }
+//                else if (fileName.substring(fileName.length() - 4, fileName.length() - 3).equals(".")) {
+//                    if(fileName.substring(fileName.length() - 4).equalsIgnoreCase(".jpg")) {
+//                        extension = ".jpg";
+//                    }
+//                    else if(fileName.substring(fileName.length() - 4).equalsIgnoreCase(".png")) {
+//                        extension = ".png";
+//                    }
+//                }
+//                
+//                fileName = Integer.toString(currentAlumni.getId()) + "_profile-picture" + extension;
+//                
+//                File uploadedImage = new File(path + File.separator + fileName);
+//                
+//                outFile = new FileOutputStream(uploadedImage);
+//                filecontent = imageFilePart.getInputStream();
+//
+//                int read = 0;
+//                final byte[] bytes = new byte[1024];
+//
+//                while ((read = filecontent.read(bytes)) != -1) {
+//                    outFile.write(bytes, 0, read);
+//                }
+//                
+//                saveUpdatedProfilePictureIntoDatabase(fileName);
+//                
+//                Logger.getLogger(AlumniServlet.class.getName()).log(Level.INFO, "File{0}being uploaded to {1}", 
+//                        new Object[]{fileName, path});
+                
+                out.println("<script>alert('Heroku does not allow creating new file(images) inside the web-app');</script>");
+                
+                
+                setAttributesForCurrentAlumni(request, response);
+                RequestDispatcher dispatcher = getServletConfig().getServletContext().getRequestDispatcher("/WEB-INF/jsp/views/updateAlumniInfoPage.jsp");
+                dispatcher.include(request, response);
             }
             else if(requestType.equalsIgnoreCase("manageAlumnusAlumnaInfo")) {
                 if(setCurrentAlumni(request)) {
@@ -221,6 +292,18 @@ public class AlumniServlet extends HttpServlet {
         }
     }
     
+    private String getFileName(final Part part) {
+    final String partHeader = part.getHeader("content-disposition");
+        Logger.getLogger(AlumniServlet.class.getName()).log(Level.INFO, "Part Header = {0}", partHeader);
+        for (String content : part.getHeader("content-disposition").split(";")) {
+            if (content.trim().startsWith("filename")) {
+                return content.substring(
+                        content.indexOf('=') + 1).trim().replace("\"", "");
+            }
+        }
+        return null;
+    }
+    
     private void viewOverlay(HttpServletRequest request, HttpServletResponse response, String message)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
@@ -327,7 +410,7 @@ public class AlumniServlet extends HttpServlet {
                 currentAlumni = null;
                 --totalAlumni;
             }            
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(AlumniServlet.class.getName()).log(Level.SEVERE, null, ex);
             status = false;
         } finally {
@@ -370,7 +453,7 @@ public class AlumniServlet extends HttpServlet {
             boolean status = false;
 
             HttpSession session = request.getSession();
-            int currentAlumniID = Integer.parseInt((String)session.getAttribute("currentAlumniID"));
+            int currentAlumniID = (Integer)session.getAttribute("currentAlumniID");
 
             for(int i = 0; i < totalAlumni; i++) {
                 if(currentAlumniID == alumniList.get(i).getAlumniID()) {
@@ -393,7 +476,6 @@ public class AlumniServlet extends HttpServlet {
         try {
             int currentAlumniID = currentAlumni.getAlumniID();
             
-            String updatedPictureName = request.getParameter("updatedPictureName");
             String updatedAlumniProfStatus = request.getParameter("updatedAlumniProfStatus");
             int updatedAlumniProfStatusGainedYear = Integer.parseInt(request.getParameter("updatedAlumniProfStatusGainedYear"));
 
@@ -425,7 +507,7 @@ public class AlumniServlet extends HttpServlet {
             
             Connection con = getCon();
             
-            String statementQuery = "UPDATE `alumni` SET `alumniAddress1` = ?, `alumniAddress2` = ?, `alumniAddressCity` = ?, `alumniAddressCountry` = ?, `alumniAddressPostCode` = ?, `alumniAddressState` = ?, `alumniBatch` = ?, `alumniCurEmployer` = ?, `alumniCurJob` = ?, `alumniCurSalary` = ?, `alumniDegree` = ?, `alumniFieldOfSpecialization` = ?, `alumniGraduateYear` = ?, `alumniPrevEmployer` = ?, `alumniPrevJob` = ?, `alumniPrevSalary` = ?, `alumniProfilePicture` = ?, `alumniProfStatus` = ?, `alumniProfStatusYearGained` = ?, `employerAddress1` = ?, `employerAddress2` = ?, `employerAddressCity` = ?, `employerAddressCountry` = ?, `employerAddressPostCode` = ?, `employerAddressState` = ? WHERE `alumni`.`alumniID` = ?;";
+            String statementQuery = "UPDATE `alumni` SET `alumniAddress1` = ?, `alumniAddress2` = ?, `alumniAddressCity` = ?, `alumniAddressCountry` = ?, `alumniAddressPostCode` = ?, `alumniAddressState` = ?, `alumniBatch` = ?, `alumniCurEmployer` = ?, `alumniCurJob` = ?, `alumniCurSalary` = ?, `alumniDegree` = ?, `alumniFieldOfSpecialization` = ?, `alumniGraduateYear` = ?, `alumniPrevEmployer` = ?, `alumniPrevJob` = ?, `alumniPrevSalary` = ?, `alumniProfStatus` = ?, `alumniProfStatusYearGained` = ?, `employerAddress1` = ?, `employerAddress2` = ?, `employerAddressCity` = ?, `employerAddressCountry` = ?, `employerAddressPostCode` = ?, `employerAddressState` = ? WHERE `alumni`.`alumniID` = ?;";
             PreparedStatement statement = con.prepareStatement(statementQuery);
             
             statement.setString(1, updatedAlumniAddress1);
@@ -444,16 +526,15 @@ public class AlumniServlet extends HttpServlet {
             statement.setString(14, updatedAlumniPrevEmployer);
             statement.setString(15, updatedAlumniPrevJob);
             statement.setDouble(16, updatedAlumniPrevSalary);
-            statement.setString(17, updatedPictureName);
-            statement.setString(18, updatedAlumniProfStatus);
-            statement.setInt(19, updatedAlumniProfStatusGainedYear);
-            statement.setString(20, updatedEmployerAddress1);
-            statement.setString(21, updatedEmployerAddress2);
-            statement.setString(22, updatedEmployerAddressCity);
-            statement.setString(23, updatedEmployerAddressCountry);
-            statement.setString(24, updatedEmployerAddressPostCode);
-            statement.setString(25, updatedEmployerAddressState);
-            statement.setInt(26, currentAlumniID);
+            statement.setString(17, updatedAlumniProfStatus);
+            statement.setInt(18, updatedAlumniProfStatusGainedYear);
+            statement.setString(19, updatedEmployerAddress1);
+            statement.setString(20, updatedEmployerAddress2);
+            statement.setString(21, updatedEmployerAddressCity);
+            statement.setString(22, updatedEmployerAddressCountry);
+            statement.setString(23, updatedEmployerAddressPostCode);
+            statement.setString(24, updatedEmployerAddressState);
+            statement.setInt(25, currentAlumniID);
             
             int result = statement.executeUpdate();
             
@@ -466,7 +547,7 @@ public class AlumniServlet extends HttpServlet {
             
             if(status) {                
                 currentAlumni.setAlumniPersonalInfo(currentAlumniID, updatedAlumniProfStatus, 
-                        updatedAlumniProfStatusGainedYear, updatedPictureName);
+                        updatedAlumniProfStatusGainedYear, currentAlumni.getAlumniProfilePicture());
                 
                 currentAlumni.setAlumniAddress(updatedAlumniAddress1, updatedAlumniAddress2, updatedAlumniAddressCity, 
                         updatedAlumniAddressPostCode, updatedAlumniAddressState, updatedAlumniAddressCountry);
@@ -486,7 +567,48 @@ public class AlumniServlet extends HttpServlet {
                     }
                 }
             }            
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AlumniServlet.class.getName()).log(Level.SEVERE, null, ex);
+            status = false;
+        } finally {
+            return status;
+        }
+    }
+    
+    private boolean saveUpdatedProfilePictureIntoDatabase(String pictureName) {
+        boolean status = false;
+        try {
+            int currentAlumniID = currentAlumni.getAlumniID();
+            
+            Connection con = getCon();
+            
+            String statementQuery = "UPDATE `alumni` SET `alumniProfilePicture` = ? WHERE `alumni`.`alumniID` = ?;";
+            PreparedStatement statement = con.prepareStatement(statementQuery);
+            
+            statement.setString(1, pictureName);
+            statement.setInt(2, currentAlumniID);
+            
+            int result = statement.executeUpdate();
+            
+            if(result == 0) {
+                status = false;
+            }
+            else if(result > 0) {
+                status = true;
+            }
+            
+            if(status) {                
+                currentAlumni.setAlumniPersonalInfo(currentAlumniID, currentAlumni.getAlumniProfStatus(), 
+                        currentAlumni.getAlumniProfStatusYearGained(), pictureName);
+                                
+                for(int i = 0; i < totalAlumni; i++) {
+                    if(alumniList.get(i).getAlumniID() == currentAlumniID) {
+                        alumniList.set(i, currentAlumni);
+                        break;
+                    }
+                }
+            }            
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(AlumniServlet.class.getName()).log(Level.SEVERE, null, ex);
             status = false;
         } finally {
@@ -537,7 +659,7 @@ public class AlumniServlet extends HttpServlet {
         setAttributesForCurrentAlumni(request, response);
         
         RequestDispatcher dispatcher = getServletConfig().getServletContext().getRequestDispatcher("/WEB-INF/jsp/views/manageAlumniInfoPage.jsp");
-        dispatcher.include(request, response);
+        dispatcher.forward(request, response);
     }
     
     private void setAttributesForCurrentAlumni(HttpServletRequest request, HttpServletResponse response)
@@ -680,7 +802,7 @@ public class AlumniServlet extends HttpServlet {
         try {
             Connection con = getCon();
             
-            String statementQuery1 = "SELECT * FROM Alumni";
+            String statementQuery1 = "SELECT * FROM alumni";
             
             Statement statement1 = con.createStatement();
             ResultSet result1 = statement1.executeQuery(statementQuery1);
@@ -747,7 +869,7 @@ public class AlumniServlet extends HttpServlet {
         try {
             Connection con = getCon();
             
-            String statementQuery1 = "SELECT * FROM Alumni";
+            String statementQuery1 = "SELECT * FROM alumni";
             
             Statement statement1 = con.createStatement();
             ResultSet result1 = statement1.executeQuery(statementQuery1);
@@ -800,8 +922,7 @@ public class AlumniServlet extends HttpServlet {
     
     private Connection getCon() throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.cj.jdbc.Driver"); 
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3307/alumni_module-db", "root", "");
-        
+        Connection con = DriverManager.getConnection("jdbc:mysql://johnny.heliohost.org:3306/ainalfa_alumni_module-db?useTimeZone=true&serverTimezone=UTC&autoReconnect=true&useSSL=false", "ainalfa_ainal2", "ainal2@123");
         return con;
     }
 
@@ -820,7 +941,6 @@ public class AlumniServlet extends HttpServlet {
         response.setContentType("text/html");
         try (PrintWriter out = response.getWriter()) {
             ArrayList<Alumni> alumni = getAllAlumniInfoFromDatabaseForMobile();
-            
             Gson gson = new Gson();
             String jsonString = gson.toJson(alumni);
             

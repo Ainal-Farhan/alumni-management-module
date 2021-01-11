@@ -35,7 +35,7 @@
                         <th scope="col">Batch</th>
                         <th scope="col">Professional Status</th>
                         <th scope="col">Current Job</th>
-                        <%  if(currentUserType.equalsIgnoreCase("admin") || currentUserType.equalsIgnoreCase("staff")) { %>
+                        <%  if(currentUserType.equalsIgnoreCase("admin")) { %>
                         <th scope="col">Manage</th>
                         <%  } %>
                     </tr>
@@ -62,7 +62,7 @@
                         <td><% out.print(alumniBatch[i]); %></td>
                         <td><% out.print(alumniProfStatus[i]); %></td>
                         <td><% out.print(alumniCurJob[i]); %></td>
-                        <%  if(currentUserType.equalsIgnoreCase("admin") || currentUserType.equalsIgnoreCase("staff")) { %>
+                        <%  if(currentUserType.equalsIgnoreCase("admin")) { %>
                         <td>
                             <form action="AlumniServlet" method="POST">
                                 <input type="hidden" name="selectedAlumniID" value="<% out.print(alumniID[i]); %>">
