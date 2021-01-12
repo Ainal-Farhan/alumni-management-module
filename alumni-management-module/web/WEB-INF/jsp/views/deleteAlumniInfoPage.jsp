@@ -18,7 +18,7 @@
             <form action="AlumniServlet" method="POST">                
                 <div class="form-group row">
                     <div class="col">
-                        <img src="http://alumni-module.herokuapp.com/assets/img/profile/alumni/<% out.print(request.getAttribute("profilePicture")); %>" class="mx-auto d-block" width="350" height="350" style="margin-top:10px;margin-bottom:10px;border-radius: 50%;">
+                        <img src="http://alumni-module.herokuapp.com/assets/img/profile/alumni/<%= request.getAttribute("profilePicture") %>" class="mx-auto d-block" width="350" height="350" style="margin-top:10px;margin-bottom:10px;border-radius: 50%;">
                     </div>
                     <div class="col">
                         <table class="table table-striped">

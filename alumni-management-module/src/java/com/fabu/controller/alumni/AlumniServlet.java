@@ -291,7 +291,7 @@ public class AlumniServlet extends HttpServlet {
             }
         }
     }
-    
+       
     private String getFileName(final Part part) {
     final String partHeader = part.getHeader("content-disposition");
         Logger.getLogger(AlumniServlet.class.getName()).log(Level.INFO, "Part Header = {0}", partHeader);
@@ -920,10 +920,14 @@ public class AlumniServlet extends HttpServlet {
         return null;
     }
     
+    private static Connection connection;
+    
     private Connection getCon() throws SQLException, ClassNotFoundException {
-        Class.forName("com.mysql.cj.jdbc.Driver"); 
-        Connection con = DriverManager.getConnection("jdbc:mysql://johnny.heliohost.org:3306/ainalfa_alumni_module-db?useTimeZone=true&serverTimezone=UTC&autoReconnect=true&useSSL=false", "ainalfa_ainal2", "ainal2@123");
-        return con;
+        if(connection == null) {
+            Class.forName("com.mysql.cj.jdbc.Driver"); 
+            connection = DriverManager.getConnection("jdbc:mysql://johnny.heliohost.org:3306/ainalfa_alumni_module-db?useTimeZone=true&serverTimezone=UTC&autoReconnect=true&useSSL=false", "ainalfa_ainal2", "ainal2@123");
+        }
+        return connection;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
