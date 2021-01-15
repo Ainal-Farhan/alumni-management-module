@@ -24,59 +24,33 @@
                         <table class="table table-striped">
                             <thead class="thead-dark">
                                 <tr>
-                                    <th colspan="2" style="text-align: center;">
-                                        Personal Information
-                                    </th>
+                                    <th colspan="2" style="text-align: center;">Personal Information</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <th>
-                                        <label>Alumni ID</label>
-                                    </th>
-                                    <td>
-                                        <input type="text" class="form-control-plaintext" value="<% out.print(request.getAttribute("id")); %>" readonly>
-                                    </td>
+                                    <th><label>Alumni ID</label></th>
+                                    <td><input type="text" class="form-control-plaintext" value="<% out.print(request.getAttribute("id")); %>" readonly></td>
                                 </tr>
                                 <tr>
-                                    <th>
-                                        <label>Name</label>
-                                    </th>
-                                    <td>
-                                        <input type="text" class="form-control-plaintext" id="name" value="<% out.print(request.getAttribute("name")); %>" readonly>
-                                    </td>
+                                    <th><label>Name</label></th>
+                                    <td><input type="text" class="form-control-plaintext" id="name" value="<% out.print(request.getAttribute("name")); %>" readonly></td>
                                 </tr>
                                 <tr>
-                                    <th>
-                                        <label>Phone Number</label>
-                                    </th>
-                                    <td>
-                                        <input type="text" class="form-control-plaintext" id="phone-number" value="<% out.print(request.getAttribute("phoneNumber")); %>" readonly>
-                                    </td>
+                                    <th><label>Phone Number</label></th>
+                                    <td><input type="text" class="form-control-plaintext" id="phone-number" value="<% out.print(request.getAttribute("phoneNumber")); %>" readonly></td>
                                 </tr>
                                 <tr>
-                                    <th>
-                                        <label>Email</label>
-                                    </th>
-                                    <td>
-                                        <input type="email" class="form-control-plaintext" value="<% out.print(request.getAttribute("email")); %>" readonly>
-                                    </td>
+                                    <th><label>Email</label></th>
+                                    <td><input type="email" class="form-control-plaintext" value="<% out.print(request.getAttribute("email")); %>" readonly></td>
                                 </tr>
                                 <tr>
-                                    <th>
-                                        <label>Professional Status</label>
-                                    </th>
-                                    <td>
-                                        <input type="text" class="form-control-plaintext" id="username" value="<% out.print(request.getAttribute("profStatus")); %>" readonly>
-                                    </td>
+                                    <th><label>Professional Status</label></th>
+                                    <td><input type="text" class="form-control-plaintext" id="username" value="<% out.print(request.getAttribute("profStatus")); %>" readonly></td>
                                 </tr>
                                 <tr>
-                                    <th>
-                                        <label>Professional Status Gained (Year)</label>
-                                    </th>
-                                    <td>
-                                        <input type="number" min="1999" max="2999" class="form-control-plaintext" id="username" value="<% out.print(request.getAttribute("profStatusYearGained")); %>" readonly>
-                                    </td>
+                                    <th><label>Professional Status Gained (Year)</label></th>
+                                    <td><input type="number" min="1999" max="2999" class="form-control-plaintext" id="username" value="<% out.print(request.getAttribute("profStatusYearGained")); %>" readonly></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -147,45 +121,47 @@
 
                 <div class="form-group">
                     <table class="table table-striped">
-                        <thead class="thead-dark">
+                        <thead class="thead-dark" style="text-align: center;">
                             <tr>
-                                <th colspan="2" style="text-align: center;">
-                                    Educational Information
-                                </th>
+                                <th colspan="5">Educational Information</th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th>Diploma</th>
+                                <th>Master</th>
+                                <th>PHD</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <th>
-                                    <label>Specialization</label>
-                                </th>
-                                <td>
-                                    <input type="text" class="form-control-plaintext" value="<% out.print(request.getAttribute("fieldOfSpecialization")); %>" readonly>
-                                </td>
+                                <th><label>Specialization</label></th>
+                                <td><input type="text" class="form-control-plaintext" value="<% out.print(request.getAttribute("fieldOfSpecialization")); %>" readonly></td>
+                                <td><input type="text" class="form-control-plaintext" value="<% out.print(request.getAttribute("fieldOfSpecialization")); %>" readonly></td>
+                                <td><input type="text" class="form-control-plaintext" value="<% out.print(request.getAttribute("fieldOfSpecialization")); %>" readonly></td>
                             </tr>
                             <tr>
-                                <th>
-                                    <label>Degree</label>
-                                </th>
-                                <td>
-                                    <input type="text" class="form-control-plaintext" value="<% out.print(request.getAttribute("degree")); %>" readonly>
-                                </td>
+                                <th><label>Degree</label></th>
+                                <td><input type="text" class="form-control-plaintext" value="<% out.print(request.getAttribute("degree")); %>" readonly></td>
+                                <td><input type="text" class="form-control-plaintext" value="<% out.print(request.getAttribute("degree")); %>" readonly></td>
+                                <td><input type="text" class="form-control-plaintext" value="<% out.print(request.getAttribute("degree")); %>" readonly></td>
                             </tr>
                             <tr>
-                                <th>
-                                    <label>Batch</label>
-                                </th>
-                                <td>
-                                    <input type="number" min="1" class="form-control-plaintext" value="<% out.print(request.getAttribute("batch")); %>" readonly>
-                                </td>
+                                <th><label>Batch</label></th>
+                                <td><input type="number" min="1" class="form-control-plaintext" value="<% out.print(request.getAttribute("batch")); %>" readonly></td>
+                                <td><input type="number" min="1" class="form-control-plaintext" value="<% out.print(request.getAttribute("batch")); %>" readonly></td>
+                                <td><input type="number" min="1" class="form-control-plaintext" value="<% out.print(request.getAttribute("batch")); %>" readonly></td>
                             </tr>
                             <tr>
-                                <th>
-                                    <label>Graduate in (Year)</label>
-                                </th>
-                                <td>
-                                    <input type="number" min="1999" max="2999" class="form-control-plaintext" value="<% out.print(request.getAttribute("graduateYear")); %>" readonly>
-                                </td>
+                                <th><label>Start in (Year)</label></th>
+                                <td><input type="number" min="1999" max="2999" class="form-control-plaintext" value="<% out.print(request.getAttribute("graduateYear")); %>" readonly></td>
+                                <td><input type="number" min="1999" max="2999" class="form-control-plaintext" value="<% out.print(request.getAttribute("graduateYear")); %>" readonly></td>
+                                <td><input type="number" min="1999" max="2999" class="form-control-plaintext" value="<% out.print(request.getAttribute("graduateYear")); %>" readonly></td>
+                            </tr>
+                            <tr>
+                                <th><label>Graduate in (Year)</label></th>
+                                <td><input type="number" min="1999" max="2999" class="form-control-plaintext" value="<% out.print(request.getAttribute("graduateYear")); %>" readonly></td>
+                                <td><input type="number" min="1999" max="2999" class="form-control-plaintext" value="<% out.print(request.getAttribute("graduateYear")); %>" readonly></td>
+                                <td><input type="number" min="1999" max="2999" class="form-control-plaintext" value="<% out.print(request.getAttribute("graduateYear")); %>" readonly></td>
                             </tr>
                         </tbody>
                     </table>

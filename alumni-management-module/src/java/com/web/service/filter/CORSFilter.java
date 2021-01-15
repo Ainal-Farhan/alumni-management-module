@@ -1,4 +1,4 @@
-package com.fabu.web.service.filter;
+package com.web.service.filter;
 
 import java.io.IOException;
 import javax.servlet.Filter;

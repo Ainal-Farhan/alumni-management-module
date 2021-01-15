@@ -3,9 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.fabu.controller.alumni;
+package com.controller.alumni;
 
-import com.fabu.model.Alumni;
+import com.controller.alumni.singleton.AlumniPageList;
+import com.controller.alumni.singleton.AlumniRequestTypeList;
+import com.controller.alumni.singleton.AlumniSQLStatementList;
+import com.database.Database;
+import com.model.alumni.Alumni;
 import com.google.gson.Gson;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -85,17 +89,17 @@ public class AlumniServlet extends HttpServlet {
             if(requestType == null) {
                 out.println("<script>alert('requestType is null');</script>");
             }
-            else if(requestType.equalsIgnoreCase("viewAlumniList")) {
+            else if(requestType.equals(AlumniRequestTypeList.REQUEST_TYPE_VIEW_ALUMNI_LIST)) {
                 if(getAllAlumniInfoFromDatabase()) {
                     sortAlumniByNameAscendingOrder();
-                    goToFirstPage();
+                    goToPage(1);
                     processViewAlumniList(request, response);
                 }
                 else {
                     out.println("<script>alert('Error Happen when retrieving all of the alumni information from database');</script>");
                 }
             }
-            else if(requestType.equalsIgnoreCase("updateAlumniProfilePicture")) {
+            else if(requestType.equals(AlumniRequestTypeList.REQUEST_TYPE_UPDATE_ALUMN_PROFILE_PICTURE)) {
 //                final String path = request.getSession().getServletContext().getRealPath("/") + "assets\\img\\profile\\alumni";
 //                
 //                if(request.getPart("remove-btn") != null) {
@@ -153,12 +157,10 @@ public class AlumniServlet extends HttpServlet {
                 
                 out.println("<script>alert('Heroku does not allow creating new file(images) inside the web-app');</script>");
                 
-                
                 setAttributesForCurrentAlumni(request, response);
-                RequestDispatcher dispatcher = getServletConfig().getServletContext().getRequestDispatcher("/WEB-INF/jsp/views/updateAlumniInfoPage.jsp");
-                dispatcher.include(request, response);
+                includePage(request, response, AlumniPageList.UPDATE_ALUMNI_INFO_PAGE);
             }
-            else if(requestType.equalsIgnoreCase("manageAlumnusAlumnaInfo")) {
+            else if(requestType.equals(AlumniRequestTypeList.REQUEST_TYPE_MANAGE_ALUMNUS_ALUMNA_INFO)) {
                 if(setCurrentAlumni(request)) {
                     viewManageInfoPage(request, response);
                 }
@@ -171,11 +173,11 @@ public class AlumniServlet extends HttpServlet {
                     out.println("Error happen when retrieving current alumni information with alumniID = " + session.getAttribute("currentAlumniID") + " from database<br />");
                 }
             } 
-            else if(requestType.equalsIgnoreCase("manageSelectedAlumniInfo")) {
+            else if(requestType.equals(AlumniRequestTypeList.REQUEST_TYPE_MANAGE_SELECTED_ALUMNI_INFO)) {
                 processManageSelectedAlumniInfo(request, response);
                 viewManageInfoPage(request, response);
             }
-            else if(requestType.equalsIgnoreCase("deleteOrUpdateAlumniInfo")) {
+            else if(requestType.equals(AlumniRequestTypeList.REQUEST_TYPE_DELETE_UPDATE_ALUMNI_INFO)) {
                 String btnUpdateSelected = request.getParameter("update-btn");
                 String btnDeleteSelected = request.getParameter("delete-btn");
                 
@@ -186,7 +188,7 @@ public class AlumniServlet extends HttpServlet {
                     processViewDeleteAlumniInfoPage(request, response);
                 }
             }
-            else if(requestType.equalsIgnoreCase("updateAlumniInfo")) {
+            else if(requestType.equals(AlumniRequestTypeList.REQUEST_TYPE_UPDATE_ALUMNI_INFO)) {
                 String btnSaveSelected = request.getParameter("save-btn");
                 String btnCancelSelected = request.getParameter("cancel-btn");
                 
@@ -199,7 +201,7 @@ public class AlumniServlet extends HttpServlet {
                 
                 viewManageInfoPage(request, response);
             }
-            else if(requestType.equalsIgnoreCase("confirmDeleteAlumniInfo")) {
+            else if(requestType.equals(AlumniRequestTypeList.REQUEST_TYPE_CONFIRMATION_TO_DELETE_ALUMNI_INFO)) {
                 String btnYesSelected = request.getParameter("yes-btn");
                 String btnNoSelected = request.getParameter("no-btn");
                 
@@ -220,27 +222,11 @@ public class AlumniServlet extends HttpServlet {
                     viewManageInfoPage(request, response);
                 }
             }
-            else if(requestType.equalsIgnoreCase("goToSelectedPage")) {
-                goToSelectedPage(Integer.parseInt(request.getParameter("selectedPage")));
+            else if(requestType.equals(AlumniRequestTypeList.REQUEST_TYPE_VIEW_ALUMNI_LIST_AT_SELECTED_PAGE)) {
+                goToPage(Integer.parseInt(request.getParameter("pageNumber")));
                 processViewAlumniList(request, response);
             }
-            else if(requestType.equalsIgnoreCase("goToFirstPage")) {
-                goToFirstPage();
-                processViewAlumniList(request, response);
-            }
-            else if(requestType.equalsIgnoreCase("goToPreviousPage")) {
-                goToPreviousPage();
-                processViewAlumniList(request, response);
-            }
-            else if(requestType.equalsIgnoreCase("goToNextPage")) {
-                goToNextPage();
-                processViewAlumniList(request, response);
-            }
-            else if(requestType.equalsIgnoreCase("goToLastPage")) {
-                goToLastPage();
-                processViewAlumniList(request, response);
-            }
-            else if(requestType.equalsIgnoreCase("filterAlumniInfo")) {
+            else if(requestType.equals(AlumniRequestTypeList.REQUEST_TYPE_FILTER_ALUMNI_INFO)) {
                 
                 if(request.getParameter("filterReq").equalsIgnoreCase("orderByNameAtoZ")) {
                     sortAlumniByNameAscendingOrder();
@@ -251,10 +237,10 @@ public class AlumniServlet extends HttpServlet {
                     request.setAttribute("filterReq", "orderByNameZtoA");
                 }
                 
-                goToFirstPage();
+                goToPage(1);
                 processViewAlumniList(request, response);
             }
-            else if(requestType.equalsIgnoreCase("searchAlumni")) {
+            else if(requestType.equals(AlumniRequestTypeList.REQUEST_TYPE_SEARCH_ALUMNI)) {
                 String searchBtn = request.getParameter("searchBtn");
                 String resetBtn = request.getParameter("resetBtn");
                 
@@ -275,13 +261,13 @@ public class AlumniServlet extends HttpServlet {
                     sortAlumniByNameAscendingOrder();
                     request.setAttribute("filterReq", "orderByNameAtoZ");
                     request.setAttribute("selectedSearchReq", searchReq);
-                    goToFirstPage();
+                    goToPage(1);
                     processViewAlumniList(request, response);
                 }
                 else if(resetBtn != null){
                     if(getAllAlumniInfoFromDatabase()) {
                         sortAlumniByNameAscendingOrder();
-                        goToFirstPage();
+                        goToPage(1);
                         processViewAlumniList(request, response);
                     }
                     else {
@@ -310,12 +296,11 @@ public class AlumniServlet extends HttpServlet {
         session.setAttribute("processMessage", message);
         session.setAttribute("displayMessage", "block");
 
-        RequestDispatcher dispatcher = getServletConfig().getServletContext().getRequestDispatcher("/WEB-INF/jsp/components/processStatusOverlay.jsp");
-        dispatcher.include(request, response);
+        includePage(request, response, AlumniPageList.PROCESS_STATUS_OVERLAY_PAGE);
     }
     
     private void searchByAlumniName(String searchInfo) {
-        ArrayList<Alumni> searchResults = new ArrayList<Alumni>();
+        ArrayList<Alumni> searchResults = new ArrayList<>();
         
         for(int i = 0; i < totalAlumni; i++) {
             if(alumniList.get(i).getName().toUpperCase().contains(searchInfo.toUpperCase())) {
@@ -355,7 +340,7 @@ public class AlumniServlet extends HttpServlet {
     }
 
     private void searchByAlumniLocationInState(String searchInfo) {
-        ArrayList<Alumni> searchResults = new ArrayList<Alumni>();
+        ArrayList<Alumni> searchResults = new ArrayList<>();
         
         for(int i = 0; i < totalAlumni; i++) {
             if(alumniList.get(i).getAlumniAddressState().toUpperCase().contains(searchInfo.toUpperCase())) {
@@ -371,50 +356,6 @@ public class AlumniServlet extends HttpServlet {
         int remain = totalAlumni % TOTAL_ALUMNI_PER_PAGE;
         if(remain > 0) {
             totalPages += 1;
-        }
-    }
-    
-    private boolean deleteAlumniAccountFromDatabase(HttpServletRequest request, HttpServletResponse response) {
-        boolean status = false;
-        try {
-            int currentAlumniID = currentAlumni.getAlumniID();
-            
-            Connection con = getCon();
-            
-            String statementQuery1 = "DELETE FROM `alumni` WHERE `alumni`.`alumniID` = ?";
-            String statementQuery2 = "DELETE FROM `user` WHERE `user`.`id` = ?";
-            
-            PreparedStatement statement1 = con.prepareStatement(statementQuery1);
-            PreparedStatement statement2 = con.prepareStatement(statementQuery2);
-            
-            statement1.setInt(1, currentAlumniID);
-            statement2.setInt(1, currentAlumniID);
-            
-            int result1 = statement1.executeUpdate();
-            int result2 = statement2.executeUpdate();
-            
-            if(result1 == 0 || result2 == 0) {
-                status = false;
-            }
-            else if(result1 > 0 && result2 > 0) {
-                status = true;
-            }
-            
-            if(status) {                
-                for(int i = 0; i < totalAlumni; i++) {
-                    if(alumniList.get(i).getAlumniID() == currentAlumniID) {
-                        alumniList.remove(i);
-                        break;
-                    }
-                }
-                currentAlumni = null;
-                --totalAlumni;
-            }            
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(AlumniServlet.class.getName()).log(Level.SEVERE, null, ex);
-            status = false;
-        } finally {
-            return status;
         }
     }
     
@@ -471,165 +412,20 @@ public class AlumniServlet extends HttpServlet {
             return false;
     }
     
-    private boolean saveUpdatedInfoIntoDatabase(HttpServletRequest request, HttpServletResponse response) {
-        boolean status = false;
-        try {
-            int currentAlumniID = currentAlumni.getAlumniID();
-            
-            String updatedAlumniProfStatus = request.getParameter("updatedAlumniProfStatus");
-            int updatedAlumniProfStatusGainedYear = Integer.parseInt(request.getParameter("updatedAlumniProfStatusGainedYear"));
-
-            String updatedAlumniAddress1 = request.getParameter("updatedAlumniAddress1");
-            String updatedAlumniAddress2 = request.getParameter("updatedAlumniAddress2");
-            String updatedAlumniAddressCity = request.getParameter("updatedAlumniAddressCity");
-            String updatedAlumniAddressPostCode = request.getParameter("updatedAlumniAddressPostCode");
-            String updatedAlumniAddressState = request.getParameter("updatedAlumniAddressState");
-            String updatedAlumniAddressCountry = request.getParameter("updatedAlumniAddressCountry");
-
-            String updatedAlumniFieldOfSpecialization = request.getParameter("updatedAlumniFieldOfSpecialization");
-            String updatedAlumniDegree = request.getParameter("updatedAlumniDegree");
-            int updatedAlumniBatch = Integer.parseInt(request.getParameter("updatedAlumniBatch"));
-            int updatedAlumniGraduateYear = Integer.parseInt(request.getParameter("updatedAlumniGraduateYear"));
-
-            String updatedAlumniCurJob = request.getParameter("updatedAlumniCurJob");
-            String updatedAlumniPrevJob = request.getParameter("updatedAlumniPrevJob");
-            String updatedAlumniCurEmployer = request.getParameter("updatedAlumniCurEmployer");
-            String updatedAlumniPrevEmployer = request.getParameter("updatedAlumniPrevEmployer");
-            double updatedAlumniCurSalary = Double.parseDouble(request.getParameter("updatedAlumniCurSalary"));
-            double updatedAlumniPrevSalary = Double.parseDouble(request.getParameter("updatedAlumniPrevSalary"));
-
-            String updatedEmployerAddress1 = request.getParameter("updatedEmployerAddress1");
-            String updatedEmployerAddress2 = request.getParameter("updatedEmployerAddress2");
-            String updatedEmployerAddressCity = request.getParameter("updatedEmployerAddressCity");
-            String updatedEmployerAddressPostCode = request.getParameter("updatedEmployerAddressPostCode");
-            String updatedEmployerAddressState = request.getParameter("updatedEmployerAddressState");
-            String updatedEmployerAddressCountry = request.getParameter("updatedEmployerAddressCountry");
-            
-            Connection con = getCon();
-            
-            String statementQuery = "UPDATE `alumni` SET `alumniAddress1` = ?, `alumniAddress2` = ?, `alumniAddressCity` = ?, `alumniAddressCountry` = ?, `alumniAddressPostCode` = ?, `alumniAddressState` = ?, `alumniBatch` = ?, `alumniCurEmployer` = ?, `alumniCurJob` = ?, `alumniCurSalary` = ?, `alumniDegree` = ?, `alumniFieldOfSpecialization` = ?, `alumniGraduateYear` = ?, `alumniPrevEmployer` = ?, `alumniPrevJob` = ?, `alumniPrevSalary` = ?, `alumniProfStatus` = ?, `alumniProfStatusYearGained` = ?, `employerAddress1` = ?, `employerAddress2` = ?, `employerAddressCity` = ?, `employerAddressCountry` = ?, `employerAddressPostCode` = ?, `employerAddressState` = ? WHERE `alumni`.`alumniID` = ?;";
-            PreparedStatement statement = con.prepareStatement(statementQuery);
-            
-            statement.setString(1, updatedAlumniAddress1);
-            statement.setString(2, updatedAlumniAddress2);
-            statement.setString(3, updatedAlumniAddressCity);
-            statement.setString(4, updatedAlumniAddressCountry);
-            statement.setString(5, updatedAlumniAddressPostCode);
-            statement.setString(6, updatedAlumniAddressState);
-            statement.setInt(7, updatedAlumniBatch);
-            statement.setString(8, updatedAlumniCurEmployer);
-            statement.setString(9, updatedAlumniCurJob);
-            statement.setDouble(10, updatedAlumniCurSalary);
-            statement.setString(11, updatedAlumniDegree);
-            statement.setString(12, updatedAlumniFieldOfSpecialization);
-            statement.setInt(13, updatedAlumniGraduateYear);
-            statement.setString(14, updatedAlumniPrevEmployer);
-            statement.setString(15, updatedAlumniPrevJob);
-            statement.setDouble(16, updatedAlumniPrevSalary);
-            statement.setString(17, updatedAlumniProfStatus);
-            statement.setInt(18, updatedAlumniProfStatusGainedYear);
-            statement.setString(19, updatedEmployerAddress1);
-            statement.setString(20, updatedEmployerAddress2);
-            statement.setString(21, updatedEmployerAddressCity);
-            statement.setString(22, updatedEmployerAddressCountry);
-            statement.setString(23, updatedEmployerAddressPostCode);
-            statement.setString(24, updatedEmployerAddressState);
-            statement.setInt(25, currentAlumniID);
-            
-            int result = statement.executeUpdate();
-            
-            if(result == 0) {
-                status = false;
-            }
-            else if(result > 0) {
-                status = true;
-            }
-            
-            if(status) {                
-                currentAlumni.setAlumniPersonalInfo(currentAlumniID, updatedAlumniProfStatus, 
-                        updatedAlumniProfStatusGainedYear, currentAlumni.getAlumniProfilePicture());
-                
-                currentAlumni.setAlumniAddress(updatedAlumniAddress1, updatedAlumniAddress2, updatedAlumniAddressCity, 
-                        updatedAlumniAddressPostCode, updatedAlumniAddressState, updatedAlumniAddressCountry);
-                
-                currentAlumni.setAlumniEducationalInfo(updatedAlumniGraduateYear, updatedAlumniDegree, updatedAlumniFieldOfSpecialization, updatedAlumniBatch);
-                
-                currentAlumni.setAlumniEmploymentInfo(updatedAlumniPrevJob, updatedAlumniPrevSalary, updatedAlumniCurJob, updatedAlumniCurSalary, 
-                        updatedAlumniPrevEmployer, updatedAlumniCurEmployer);
-                
-                currentAlumni.setEmployerAddress(updatedEmployerAddress1, updatedEmployerAddress2, updatedEmployerAddressCity, 
-                        updatedEmployerAddressPostCode, updatedEmployerAddressState, updatedEmployerAddressCountry);
-                
-                for(int i = 0; i < totalAlumni; i++) {
-                    if(alumniList.get(i).getAlumniID() == currentAlumniID) {
-                        alumniList.set(i, currentAlumni);
-                        break;
-                    }
-                }
-            }            
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(AlumniServlet.class.getName()).log(Level.SEVERE, null, ex);
-            status = false;
-        } finally {
-            return status;
-        }
-    }
     
-    private boolean saveUpdatedProfilePictureIntoDatabase(String pictureName) {
-        boolean status = false;
-        try {
-            int currentAlumniID = currentAlumni.getAlumniID();
-            
-            Connection con = getCon();
-            
-            String statementQuery = "UPDATE `alumni` SET `alumniProfilePicture` = ? WHERE `alumni`.`alumniID` = ?;";
-            PreparedStatement statement = con.prepareStatement(statementQuery);
-            
-            statement.setString(1, pictureName);
-            statement.setInt(2, currentAlumniID);
-            
-            int result = statement.executeUpdate();
-            
-            if(result == 0) {
-                status = false;
-            }
-            else if(result > 0) {
-                status = true;
-            }
-            
-            if(status) {                
-                currentAlumni.setAlumniPersonalInfo(currentAlumniID, currentAlumni.getAlumniProfStatus(), 
-                        currentAlumni.getAlumniProfStatusYearGained(), pictureName);
-                                
-                for(int i = 0; i < totalAlumni; i++) {
-                    if(alumniList.get(i).getAlumniID() == currentAlumniID) {
-                        alumniList.set(i, currentAlumni);
-                        break;
-                    }
-                }
-            }            
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(AlumniServlet.class.getName()).log(Level.SEVERE, null, ex);
-            status = false;
-        } finally {
-            return status;
-        }
-    }
     
     private void processViewUpdateAlumniInfoPage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {        
         setAttributesForCurrentAlumni(request, response);
         
-        RequestDispatcher dispatcher = getServletConfig().getServletContext().getRequestDispatcher("/WEB-INF/jsp/views/updateAlumniInfoPage.jsp");
-        dispatcher.forward(request, response);
+        forwardPage(request, response, AlumniPageList.UPDATE_ALUMNI_INFO_PAGE);
     }
     
     private void processViewDeleteAlumniInfoPage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         setAttributesForCurrentAlumni(request, response);
         
-        RequestDispatcher dispatcher = getServletConfig().getServletContext().getRequestDispatcher("/WEB-INF/jsp/views/deleteAlumniInfoPage.jsp");
-        dispatcher.forward(request, response);
+        forwardPage(request, response, AlumniPageList.DELETE_ALUMNI_INFO_PAGE);
     }
     
     private void processManageSelectedAlumniInfo(HttpServletRequest request, HttpServletResponse response)
@@ -658,8 +454,7 @@ public class AlumniServlet extends HttpServlet {
         
         setAttributesForCurrentAlumni(request, response);
         
-        RequestDispatcher dispatcher = getServletConfig().getServletContext().getRequestDispatcher("/WEB-INF/jsp/views/manageAlumniInfoPage.jsp");
-        dispatcher.forward(request, response);
+        forwardPage(request, response, AlumniPageList.MANAGE_ALUMNI_INFO_PAGE);
     }
     
     private void setAttributesForCurrentAlumni(HttpServletRequest request, HttpServletResponse response)
@@ -751,48 +546,28 @@ public class AlumniServlet extends HttpServlet {
         request.setAttribute("alumniProfStatusArray", alumniProfStatus);
         request.setAttribute("alumniCurJobArray", alumniCurJob);
         
-        RequestDispatcher dispatcher = getServletConfig().getServletContext().getRequestDispatcher("/WEB-INF/jsp/views/viewAlumniListInfoPage.jsp");
+        includePage(request, response, AlumniPageList.VIEW_ALUMNI_LIST_INFO_PAGE);
+    }
+    
+    
+    private void goToPage(int page) {
+        if(totalPages == 0) {
+            currentPage = 0;
+            return;
+        }
+        currentPage = page;
+    }
+    
+    private void forwardPage(HttpServletRequest request, HttpServletResponse response, String path)
+            throws ServletException, IOException {
+        RequestDispatcher dispatcher = getServletConfig().getServletContext().getRequestDispatcher(path);
+        dispatcher.forward(request, response);
+    }
+    
+    private void includePage(HttpServletRequest request, HttpServletResponse response, String path)
+            throws ServletException, IOException {
+        RequestDispatcher dispatcher = getServletConfig().getServletContext().getRequestDispatcher(path);
         dispatcher.include(request, response);
-    }
-    
-    private void goToFirstPage() {
-        if(totalPages == 0) {
-            currentPage = 0;
-            return;
-        }
-        currentPage = 1;
-    }
-    
-    private void goToPreviousPage() {
-        if(totalPages == 0) {
-            currentPage = 0;
-            return;
-        }
-        if(currentPage == 1)
-            return;
-        currentPage--;
-    }
-    
-    private void goToNextPage() {
-        if(totalPages == 0) {
-            currentPage = 0;
-            return;
-        }
-        if(currentPage == totalPages)
-            return;
-        currentPage++;
-    }
-    
-    private void goToLastPage() {
-        if(totalPages == 0) {
-            currentPage = 0;
-            return;
-        }
-        currentPage = totalPages;
-    }
-    
-    private void goToSelectedPage(int selectedPage) {
-        currentPage = selectedPage;
     }
     
     private boolean getAllAlumniInfoFromDatabase() {
@@ -800,14 +575,14 @@ public class AlumniServlet extends HttpServlet {
         
         boolean status = false;
         try {
-            Connection con = getCon();
+            Connection con = new Database().getCon();
             
-            String statementQuery1 = "SELECT * FROM alumni";
+            String statementQuery1 = AlumniSQLStatementList.SQL_STATEMENT_RETRIEVE_ALL_FROM_TABLE_ALUMNI;
             
             Statement statement1 = con.createStatement();
             ResultSet result1 = statement1.executeQuery(statementQuery1);
             
-            String statementQuery2 = "SELECT * FROM user WHERE role = 'alumni';";
+            String statementQuery2 = AlumniSQLStatementList.SQL_STATEMENT_RETRIEVE_ALL_FROM_TABLE_USER_WHERE_ROLE_IS_ALUMNI;
             
             Statement statement2 = con.createStatement();
             ResultSet result2 = statement2.executeQuery(statementQuery2);
@@ -867,14 +642,14 @@ public class AlumniServlet extends HttpServlet {
         ArrayList<Alumni> alumniUserList = new ArrayList<>();
         
         try {
-            Connection con = getCon();
+            Connection con = new Database().getCon();
             
-            String statementQuery1 = "SELECT * FROM alumni";
+            String statementQuery1 = AlumniSQLStatementList.SQL_STATEMENT_RETRIEVE_ALL_FROM_TABLE_ALUMNI;
             
             Statement statement1 = con.createStatement();
             ResultSet result1 = statement1.executeQuery(statementQuery1);
             
-            String statementQuery2 = "SELECT * FROM user WHERE role = 'alumni';";
+            String statementQuery2 = AlumniSQLStatementList.SQL_STATEMENT_RETRIEVE_ALL_FROM_TABLE_USER_WHERE_ROLE_IS_ALUMNI;
             
             Statement statement2 = con.createStatement();
             ResultSet result2 = statement2.executeQuery(statementQuery2);
@@ -920,16 +695,195 @@ public class AlumniServlet extends HttpServlet {
         return null;
     }
     
-    private static Connection connection;
-    
-    private Connection getCon() throws SQLException, ClassNotFoundException {
-        if(connection == null) {
-            Class.forName("com.mysql.cj.jdbc.Driver"); 
-            connection = DriverManager.getConnection("jdbc:mysql://johnny.heliohost.org:3306/ainalfa_alumni_module-db?useTimeZone=true&serverTimezone=UTC&autoReconnect=true&useSSL=false", "ainalfa_ainal2", "ainal2@123");
-        }
-        return connection;
-    }
+    private boolean saveUpdatedInfoIntoDatabase(HttpServletRequest request, HttpServletResponse response) {
+        boolean status = false;
+        try {
+            int currentAlumniID = currentAlumni.getAlumniID();
+            
+            String updatedAlumniProfStatus = request.getParameter("updatedAlumniProfStatus");
+            int updatedAlumniProfStatusGainedYear = Integer.parseInt(request.getParameter("updatedAlumniProfStatusGainedYear"));
 
+            String updatedAlumniAddress1 = request.getParameter("updatedAlumniAddress1");
+            String updatedAlumniAddress2 = request.getParameter("updatedAlumniAddress2");
+            String updatedAlumniAddressCity = request.getParameter("updatedAlumniAddressCity");
+            String updatedAlumniAddressPostCode = request.getParameter("updatedAlumniAddressPostCode");
+            String updatedAlumniAddressState = request.getParameter("updatedAlumniAddressState");
+            String updatedAlumniAddressCountry = request.getParameter("updatedAlumniAddressCountry");
+
+            String updatedAlumniFieldOfSpecialization = request.getParameter("updatedAlumniFieldOfSpecialization");
+            String updatedAlumniDegree = request.getParameter("updatedAlumniDegree");
+            int updatedAlumniBatch = Integer.parseInt(request.getParameter("updatedAlumniBatch"));
+            int updatedAlumniGraduateYear = Integer.parseInt(request.getParameter("updatedAlumniGraduateYear"));
+
+            String updatedAlumniCurJob = request.getParameter("updatedAlumniCurJob");
+            String updatedAlumniPrevJob = request.getParameter("updatedAlumniPrevJob");
+            String updatedAlumniCurEmployer = request.getParameter("updatedAlumniCurEmployer");
+            String updatedAlumniPrevEmployer = request.getParameter("updatedAlumniPrevEmployer");
+            double updatedAlumniCurSalary = Double.parseDouble(request.getParameter("updatedAlumniCurSalary"));
+            double updatedAlumniPrevSalary = Double.parseDouble(request.getParameter("updatedAlumniPrevSalary"));
+
+            String updatedEmployerAddress1 = request.getParameter("updatedEmployerAddress1");
+            String updatedEmployerAddress2 = request.getParameter("updatedEmployerAddress2");
+            String updatedEmployerAddressCity = request.getParameter("updatedEmployerAddressCity");
+            String updatedEmployerAddressPostCode = request.getParameter("updatedEmployerAddressPostCode");
+            String updatedEmployerAddressState = request.getParameter("updatedEmployerAddressState");
+            String updatedEmployerAddressCountry = request.getParameter("updatedEmployerAddressCountry");
+            
+            Connection con = new Database().getCon();
+            
+            String statementQuery = AlumniSQLStatementList.SQL_STATEMENT_UPDATE_SELECTED_ALUMNI_INFO;
+            PreparedStatement statement = con.prepareStatement(statementQuery);
+            
+            statement.setString(1, updatedAlumniAddress1);
+            statement.setString(2, updatedAlumniAddress2);
+            statement.setString(3, updatedAlumniAddressCity);
+            statement.setString(4, updatedAlumniAddressCountry);
+            statement.setString(5, updatedAlumniAddressPostCode);
+            statement.setString(6, updatedAlumniAddressState);
+            statement.setInt(7, updatedAlumniBatch);
+            statement.setString(8, updatedAlumniCurEmployer);
+            statement.setString(9, updatedAlumniCurJob);
+            statement.setDouble(10, updatedAlumniCurSalary);
+            statement.setString(11, updatedAlumniDegree);
+            statement.setString(12, updatedAlumniFieldOfSpecialization);
+            statement.setInt(13, updatedAlumniGraduateYear);
+            statement.setString(14, updatedAlumniPrevEmployer);
+            statement.setString(15, updatedAlumniPrevJob);
+            statement.setDouble(16, updatedAlumniPrevSalary);
+            statement.setString(17, updatedAlumniProfStatus);
+            statement.setInt(18, updatedAlumniProfStatusGainedYear);
+            statement.setString(19, updatedEmployerAddress1);
+            statement.setString(20, updatedEmployerAddress2);
+            statement.setString(21, updatedEmployerAddressCity);
+            statement.setString(22, updatedEmployerAddressCountry);
+            statement.setString(23, updatedEmployerAddressPostCode);
+            statement.setString(24, updatedEmployerAddressState);
+            statement.setInt(25, currentAlumniID);
+            
+            int result = statement.executeUpdate();
+            
+            if(result == 0) {
+                status = false;
+            }
+            else if(result > 0) {
+                status = true;
+            }
+            
+            if(status) {                
+                currentAlumni.setAlumniPersonalInfo(currentAlumniID, updatedAlumniProfStatus, 
+                        updatedAlumniProfStatusGainedYear, currentAlumni.getAlumniProfilePicture());
+                
+                currentAlumni.setAlumniAddress(updatedAlumniAddress1, updatedAlumniAddress2, updatedAlumniAddressCity, 
+                        updatedAlumniAddressPostCode, updatedAlumniAddressState, updatedAlumniAddressCountry);
+                
+                currentAlumni.setAlumniEducationalInfo(updatedAlumniGraduateYear, updatedAlumniDegree, updatedAlumniFieldOfSpecialization, updatedAlumniBatch);
+                
+                currentAlumni.setAlumniEmploymentInfo(updatedAlumniPrevJob, updatedAlumniPrevSalary, updatedAlumniCurJob, updatedAlumniCurSalary, 
+                        updatedAlumniPrevEmployer, updatedAlumniCurEmployer);
+                
+                currentAlumni.setEmployerAddress(updatedEmployerAddress1, updatedEmployerAddress2, updatedEmployerAddressCity, 
+                        updatedEmployerAddressPostCode, updatedEmployerAddressState, updatedEmployerAddressCountry);
+                
+                for(int i = 0; i < totalAlumni; i++) {
+                    if(alumniList.get(i).getAlumniID() == currentAlumniID) {
+                        alumniList.set(i, currentAlumni);
+                        break;
+                    }
+                }
+            }            
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AlumniServlet.class.getName()).log(Level.SEVERE, null, ex);
+            status = false;
+        } finally {
+            return status;
+        }
+    }
+    
+    private boolean saveUpdatedProfilePictureIntoDatabase(String pictureName) {
+        boolean status = false;
+        try {
+            int currentAlumniID = currentAlumni.getAlumniID();
+            
+            Connection con = new Database().getCon();
+            
+            String statementQuery = AlumniSQLStatementList.SQL_STATEMENT_UPDATE_SELECTED_ALUMNI_PROFILE_PICTURE;
+            PreparedStatement statement = con.prepareStatement(statementQuery);
+            
+            statement.setString(1, pictureName);
+            statement.setInt(2, currentAlumniID);
+            
+            int result = statement.executeUpdate();
+            
+            if(result == 0) {
+                status = false;
+            }
+            else if(result > 0) {
+                status = true;
+            }
+            
+            if(status) {                
+                currentAlumni.setAlumniPersonalInfo(currentAlumniID, currentAlumni.getAlumniProfStatus(), 
+                        currentAlumni.getAlumniProfStatusYearGained(), pictureName);
+                                
+                for(int i = 0; i < totalAlumni; i++) {
+                    if(alumniList.get(i).getAlumniID() == currentAlumniID) {
+                        alumniList.set(i, currentAlumni);
+                        break;
+                    }
+                }
+            }            
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AlumniServlet.class.getName()).log(Level.SEVERE, null, ex);
+            status = false;
+        } finally {
+            return status;
+        }
+    }
+    
+    private boolean deleteAlumniAccountFromDatabase(HttpServletRequest request, HttpServletResponse response) {
+        boolean status = false;
+        try {
+            int currentAlumniID = currentAlumni.getAlumniID();
+            
+            Connection con = new Database().getCon();
+            
+            String statementQuery1 = AlumniSQLStatementList.SQL_STATEMENT_DELETE_SELECTED_ALUMNI;
+            String statementQuery2 = AlumniSQLStatementList.SQL_STATEMENT_DELETE_SELECTED_USER;
+            
+            PreparedStatement statement1 = con.prepareStatement(statementQuery1);
+            PreparedStatement statement2 = con.prepareStatement(statementQuery2);
+            
+            statement1.setInt(1, currentAlumniID);
+            statement2.setInt(1, currentAlumniID);
+            
+            int result1 = statement1.executeUpdate();
+            int result2 = statement2.executeUpdate();
+            
+            if(result1 == 0 || result2 == 0) {
+                status = false;
+            }
+            else if(result1 > 0 && result2 > 0) {
+                status = true;
+            }
+            
+            if(status) {                
+                for(int i = 0; i < totalAlumni; i++) {
+                    if(alumniList.get(i).getAlumniID() == currentAlumniID) {
+                        alumniList.remove(i);
+                        break;
+                    }
+                }
+                currentAlumni = null;
+                --totalAlumni;
+            }            
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AlumniServlet.class.getName()).log(Level.SEVERE, null, ex);
+            status = false;
+        } finally {
+            return status;
+        }
+    }
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

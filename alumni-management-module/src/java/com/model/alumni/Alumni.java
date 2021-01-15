@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.fabu.model;
+package com.model.alumni;
 
-import com.fabu.model.User;
+import com.model.user.User;
+import com.model.user.User;
 import java.io.Serializable;
 
 /**

@@ -20,7 +20,7 @@
         <title>Index</title>
     </head>
     <body>
-        <%@include file="/WEB-INF/jsp/components/navigationBar.jsp" %>
+        <%@include file="/WEB-INF/alumni/jsp/components/navigationBar.jsp" %>
         <h1>This is <%= (String)session.getAttribute("currentUserType") %> perspective</h1>
         
         <form action="TempServlet" method="POST">

@@ -6,7 +6,7 @@
     </welcome-file-list>
     <filter>
         <filter-name>CorsFilter</filter-name>
-        <filter-class>com.fabu.web.service.filter.CORSFilter</filter-class>
+        <filter-class>com.web.service.filter.CORSFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>CorsFilter</filter-name>
@@ -14,7 +14,7 @@
     </filter-mapping>
     <servlet>
         <servlet-name>AlumniServlet</servlet-name>
-        <servlet-class>com.fabu.controller.alumni.AlumniServlet</servlet-class>
+        <servlet-class>com.controller.alumni.AlumniServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>TempServlet</servlet-name>
