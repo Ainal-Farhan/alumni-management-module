@@ -30,10 +30,6 @@
                             <label class="form-check-label" for="searchByName">Name</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="searchReq" id="searchByBatch" value="searchByBatch" <% if(selectedSearchReq.equalsIgnoreCase("searchByBatch")) out.print("checked"); %>>
-                            <label class="form-check-label" for="searchByBatch">Batch</label>
-                        </div>
-                        <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="searchReq" id="searchByLocationInState" value="searchByLocationInState" <% if(selectedSearchReq.equalsIgnoreCase("searchByLocationInState")) out.print("checked"); %>>
                             <label class="form-check-label" for="searchByLocationInState">Location (State)</label>
                         </div>

@@ -201,43 +201,35 @@
                     <table class="table table-striped">
                         <thead class="thead-dark">
                             <tr>
-                                <th colspan="2" style="text-align: center;">
+                                <th colspan="4" style="text-align: center;">
                                     Educational Information
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <th>
-                                    <label>Specialization</label>
-                                </th>
-                                <td>
-                                    <input type="text" name="updatedAlumniFieldOfSpecialization" class="form-control" value="<% out.print(request.getAttribute("fieldOfSpecialization")); %>">
-                                </td>
+                                <th><label>Specialization</label></th>
+                                <td><input type="text" class="form-control" name="updatedAlumniFieldOfSpecializationDiploma" value="<% out.print(request.getAttribute("fieldOfSpecializationDiploma")); %>"></td>
+                                <td><input type="text" class="form-control" name="updatedAlumniFieldOfSpecializationBachelor" value="<% out.print(request.getAttribute("fieldOfSpecializationBachelor")); %>"></td>
+                                <td><input type="text" class="form-control" name="updatedAlumniFieldOfSpecializationMaster" value="<% out.print(request.getAttribute("fieldOfSpecializationMaster")); %>"></td>
                             </tr>
                             <tr>
-                                <th>
-                                    <label>Degree</label>
-                                </th>
-                                <td>
-                                    <input type="text" name="updatedAlumniDegree" class="form-control" value="<% out.print(request.getAttribute("degree")); %>">
-                                </td>
+                                <th><label>Batch</label></th>
+                                <td><input type="number" min="1" class="form-control" name="updatedAlumniBatchDiploma" value="<% out.print(request.getAttribute("batchDiploma")); %>"></td>
+                                <td><input type="number" min="1" class="form-control" name="updatedAlumniBatchBachelor" value="<% out.print(request.getAttribute("batchBachelor")); %>"></td>
+                                <td><input type="number" min="1" class="form-control" name="updatedAlumniBatchMaster" value="<% out.print(request.getAttribute("batchMaster")); %>"></td>
                             </tr>
                             <tr>
-                                <th>
-                                    <label>Batch</label>
-                                </th>
-                                <td>
-                                    <input type="number" min="1" name="updatedAlumniBatch" class="form-control" value="<% out.print(request.getAttribute("batch")); %>">
-                                </td>
+                                <th><label>Start in (Year)</label></th>
+                                <td><input type="number" min="1999" max="2999" class="form-control" name="updatedAlumniStartStudyDiploma" value="<% out.print(request.getAttribute("startStudyYearDiploma")); %>"></td>
+                                <td><input type="number" min="1999" max="2999" class="form-control" name="updatedAlumniStartStudyBachelor" value="<% out.print(request.getAttribute("startStudyYearBachelor")); %>"></td>
+                                <td><input type="number" min="1999" max="2999" class="form-control" name="updatedAlumniStartStudyMaster" value="<% out.print(request.getAttribute("startStudyYearMaster")); %>"></td>
                             </tr>
                             <tr>
-                                <th>
-                                    <label>Graduate in (Year)</label>
-                                </th>
-                                <td>
-                                    <input type="number" min="1999" max="2999" name="updatedAlumniGraduateYear" class="form-control" value="<% out.print(request.getAttribute("graduateYear")); %>">
-                                </td>
+                                <th><label>Graduate in (Year)</label></th>
+                                <td><input type="number" min="1999" max="2999" class="form-control" name="updatedAlumniGraduateYearDiploma" value="<% out.print(request.getAttribute("graduateYearDiploma")); %>"></td>
+                                <td><input type="number" min="1999" max="2999" class="form-control" name="updatedAlumniGraduateYearBachelor" value="<% out.print(request.getAttribute("graduateYearBachelor")); %>"></td>
+                                <td><input type="number" min="1999" max="2999" class="form-control" name="updatedAlumniGraduateYearMaster" value="<% out.print(request.getAttribute("graduateYearMaster")); %>"></td>
                             </tr>
                         </tbody>
                     </table>

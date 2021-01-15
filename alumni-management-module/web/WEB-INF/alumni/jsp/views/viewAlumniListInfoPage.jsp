@@ -61,19 +61,21 @@
                 <table class="table table-hover table-striped table-light" style="text-align:center;">
                     <thead class="thead-dark">
                         <tr>
-                            <th scope="col">No</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Location (State)</th>
-                            <th scope="col">Graduate In (Diploma)</th>
-                            <th scope="col">Graduate In (Master)</th>
-                            <th scope="col">Graduate In (PHD)</th>
-                            <th scope="col">Batch</th>
-                            <th scope="col">Professional Status</th>
-                            <th scope="col">Current Job</th>
+                            <th scope="col" rowspan="2" class="align-middle">No</th>
+                            <th scope="col" rowspan="2" class="align-middle">Name</th>
+                            <th scope="col" rowspan="2" class="align-middle">Email</th>
+                            <th scope="col" rowspan="2" class="align-middle">Location (State)</th>
+                            <th scope="col" colspan="3" class="align-middle">Graduation Year</th>
+                            <th scope="col" rowspan="2" class="align-middle">Professional Status</th>
+                            <th scope="col" rowspan="2" class="align-middle">Current Job</th>
                             <%  if(currentUserType.equalsIgnoreCase("admin")) { %>
-                            <th scope="col">Manage</th>
+                            <th scope="col" rowspan="2" class="align-middle">Manage</th>
                             <%  } %>
+                        </tr>
+                        <tr>
+                            <th>Diploma</th>
+                            <th>Bachelor</th>
+                            <th>Master</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -81,8 +83,9 @@
                         <%  String[] alumniName = (String[])request.getAttribute("alumniNameArray"); %>
                         <%  String[] alumniEmail = (String[])request.getAttribute("alumniEmailArray"); %>
                         <%  String[] alumniState = (String[])request.getAttribute("alumniStateArray"); %>
-                        <%  String[] alumniGraduationYear = (String[])request.getAttribute("alumniGraduationYearArray"); %>
-                        <%  String[] alumniBatch = (String[])request.getAttribute("alumniBatchArray"); %>
+                        <%  String[] alumniGraduationYearDiploma = (String[])request.getAttribute("alumniGraduationYearDiplomaArray"); %>
+                        <%  String[] alumniGraduationYearBachelor = (String[])request.getAttribute("alumniGraduationYearBachelorArray"); %>
+                        <%  String[] alumniGraduationYearMaster = (String[])request.getAttribute("alumniGraduationYearMasterArray"); %>
                         <%  String[] alumniProfStatus = (String[])request.getAttribute("alumniProfStatusArray"); %>
                         <%  String[] alumniCurJob = (String[])request.getAttribute("alumniCurJobArray"); %>
 
@@ -91,15 +94,14 @@
                         <%      if(alumniID[i].equals("")) break;%>
                         <tr>
                             <th scope="row"><%= i+1+(Integer)request.getAttribute("TOTAL_ALUMNI_PER_PAGE") * (Integer)request.getAttribute("currentPage") - (Integer)request.getAttribute("TOTAL_ALUMNI_PER_PAGE") %></th>
-                            <td><% out.print(alumniName[i]); %></td>
-                            <td><% out.print(alumniEmail[i]); %></td>
-                            <td><% out.print(alumniState[i]); %></td>
-                            <td><% out.print(alumniGraduationYear[i]); %></td>
-                            <td>-</td>
-                            <td><% out.print(alumniGraduationYear[i]); %></td>
-                            <td><% out.print(alumniBatch[i]); %></td>
-                            <td><% out.print(alumniProfStatus[i]); %></td>
-                            <td><% out.print(alumniCurJob[i]); %></td>
+                            <td><%= alumniName[i] %></td>
+                            <td><%= alumniEmail[i] %></td>
+                            <td><%= alumniState[i] %></td>
+                            <td><%= alumniGraduationYearDiploma[i].equals("0")? "-" : alumniGraduationYearDiploma[i] %></td>
+                            <td><%= alumniGraduationYearBachelor[i].equals("0")? "-" : alumniGraduationYearBachelor[i] %></td>
+                            <td><%= alumniGraduationYearMaster[i].equals("0")? "-" : alumniGraduationYearMaster[i] %></td>
+                            <td><%= alumniProfStatus[i] %></td>
+                            <td><%= alumniCurJob[i] %></td>
                             <%  if(currentUserType.equalsIgnoreCase("admin")) { %>
                             <td>
                                 <form action="AlumniServlet" method="POST">

@@ -251,9 +251,6 @@ public class AlumniServlet extends HttpServlet {
                     if(searchReq.equalsIgnoreCase("searchByName")) {
                         searchByAlumniName(searchInfo);
                     }
-                    else if(searchReq.equalsIgnoreCase("searchByBatch")) {
-                        searchByAlumniBatch(Integer.parseInt(searchInfo));
-                    }
                     else if(searchReq.equalsIgnoreCase("searchByLocationInState")) {
                         searchByAlumniLocationInState(searchInfo);
                     }
@@ -304,26 +301,6 @@ public class AlumniServlet extends HttpServlet {
         
         for(int i = 0; i < totalAlumni; i++) {
             if(alumniList.get(i).getName().toUpperCase().contains(searchInfo.toUpperCase())) {
-                searchResults.add(alumniList.get(i));
-            }
-        }
-        
-        alumniList = searchResults;
-        
-        totalAlumni = searchResults.size();
-        totalPages = totalAlumni / TOTAL_ALUMNI_PER_PAGE;
-            
-        int remain = totalAlumni % TOTAL_ALUMNI_PER_PAGE;
-        if(remain > 0) {
-            totalPages += 1;
-        }
-    }
-
-    private void searchByAlumniBatch(int searchInfo) {
-        ArrayList<Alumni> searchResults = new ArrayList<Alumni>();
-        
-        for(int i = 0; i < totalAlumni; i++) {
-            if(alumniList.get(i).getAlumniBatch() == searchInfo) {
                 searchResults.add(alumniList.get(i));
             }
         }
@@ -394,10 +371,10 @@ public class AlumniServlet extends HttpServlet {
             boolean status = false;
 
             HttpSession session = request.getSession();
-            int currentAlumniID = (Integer)session.getAttribute("currentAlumniID");
+            String currentAlumniID = (String)session.getAttribute("currentAlumniID");
 
             for(int i = 0; i < totalAlumni; i++) {
-                if(currentAlumniID == alumniList.get(i).getAlumniID()) {
+            if(alumniList.get(i).getAlumniID().equals(currentAlumniID)) {
                     currentAlumni = alumniList.get(i);
                     status = true;
                     break;
@@ -430,10 +407,10 @@ public class AlumniServlet extends HttpServlet {
     
     private void processManageSelectedAlumniInfo(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int selectedAlumniID = Integer.parseInt(request.getParameter("selectedAlumniID"));
+        String selectedAlumniID = request.getParameter("selectedAlumniID");
                 
         for(int i = 0; i < totalAlumni; i++) {
-            if(alumniList.get(i).getAlumniID() == selectedAlumniID) {
+            if(alumniList.get(i).getAlumniID().equals(selectedAlumniID)) {
                 currentAlumni = alumniList.get(i);
                 break;
             }
@@ -472,12 +449,22 @@ public class AlumniServlet extends HttpServlet {
         request.setAttribute("alumniAddressCountry", currentAlumni.getAlumniAddressCountry());
         request.setAttribute("alumniAddressPostCode", currentAlumni.getAlumniAddressPostCode());
         request.setAttribute("alumniAddressState", currentAlumni.getAlumniAddressState());
-        
-        request.setAttribute("batch", currentAlumni.getAlumniBatch());
-        request.setAttribute("degree", currentAlumni.getAlumniDegree());
         request.setAttribute("email", currentAlumni.getEmail());
-        request.setAttribute("fieldOfSpecialization", currentAlumni.getAlumniFieldOfSpecialization());
-        request.setAttribute("graduateYear", currentAlumni.getAlumniGraduateYear());
+        
+        request.setAttribute("batchDiploma", currentAlumni.getAlumniBatchDiploma());
+        request.setAttribute("startStudyYearDiploma", currentAlumni.getAlumniStartStudyYearDiploma());
+        request.setAttribute("fieldOfSpecializationDiploma", currentAlumni.getAlumniFieldOfSpecializationDiploma());
+        request.setAttribute("graduateYearDiploma", currentAlumni.getAlumniGraduateYearDiploma());
+        
+        request.setAttribute("batchBachelor", currentAlumni.getAlumniBatchBachelor());
+        request.setAttribute("startStudyYearBachelor", currentAlumni.getAlumniStartStudyYearBachelor());
+        request.setAttribute("fieldOfSpecializationBachelor", currentAlumni.getAlumniFieldOfSpecializationBachelor());
+        request.setAttribute("graduateYearBachelor", currentAlumni.getAlumniGraduateYearBachelor());
+        
+        request.setAttribute("batchMaster", currentAlumni.getAlumniBatchMaster());
+        request.setAttribute("startStudyYearMaster", currentAlumni.getAlumniStartStudyYearMaster());
+        request.setAttribute("fieldOfSpecializationMaster", currentAlumni.getAlumniFieldOfSpecializationMaster());
+        request.setAttribute("graduateYearMaster", currentAlumni.getAlumniGraduateYearMaster());
         
         request.setAttribute("curEmployer", currentAlumni.getAlumniCurEmployer());
         request.setAttribute("curJob", currentAlumni.getAlumniCurJob());
@@ -502,8 +489,9 @@ public class AlumniServlet extends HttpServlet {
         String[] alumniName = new String[TOTAL_ALUMNI_PER_PAGE];
         String[] alumniEmail = new String[TOTAL_ALUMNI_PER_PAGE];
         String[] alumniState = new String[TOTAL_ALUMNI_PER_PAGE]; 
-        String[] alumniGraduationYear = new String[TOTAL_ALUMNI_PER_PAGE];
-        String[] alumniBatch = new String[TOTAL_ALUMNI_PER_PAGE];
+        String[] alumniGraduationYearDiploma = new String[TOTAL_ALUMNI_PER_PAGE];
+        String[] alumniGraduationYearBachelor = new String[TOTAL_ALUMNI_PER_PAGE];
+        String[] alumniGraduationYearMaster = new String[TOTAL_ALUMNI_PER_PAGE];
         String[] alumniProfStatus = new String[TOTAL_ALUMNI_PER_PAGE];
         String[] alumniCurJob = new String[TOTAL_ALUMNI_PER_PAGE];
         
@@ -515,19 +503,21 @@ public class AlumniServlet extends HttpServlet {
                 alumniName[i] = "";
                 alumniEmail[i] = "";
                 alumniState[i] = "";
-                alumniGraduationYear[i] = "";
-                alumniBatch[i] = "";
+                alumniGraduationYearDiploma[i] = "";
+                alumniGraduationYearBachelor[i] = "";
+                alumniGraduationYearMaster[i] = "";
                 alumniProfStatus[i] = "";
                 alumniCurJob[i] = "";
                 continue;
             }
             
-            alumniID[i] = Integer.toString(alumniList.get(j).getAlumniID());
+            alumniID[i] = alumniList.get(j).getAlumniID();
             alumniName[i] = alumniList.get(j).getName();
             alumniEmail[i] = alumniList.get(j).getEmail();
             alumniState[i] = alumniList.get(j).getAlumniAddressState();
-            alumniGraduationYear[i] = Integer.toString(alumniList.get(j).getAlumniGraduateYear());
-            alumniBatch[i] = Integer.toString(alumniList.get(j).getAlumniBatch());
+            alumniGraduationYearDiploma[i] = Integer.toString(alumniList.get(j).getAlumniGraduateYearDiploma());
+            alumniGraduationYearBachelor[i] = Integer.toString(alumniList.get(j).getAlumniGraduateYearBachelor());
+            alumniGraduationYearMaster[i] = Integer.toString(alumniList.get(j).getAlumniGraduateYearMaster());
             alumniProfStatus[i] = alumniList.get(j).getAlumniProfStatus();
             alumniCurJob[i] = alumniList.get(j).getAlumniCurJob();
         }
@@ -541,8 +531,9 @@ public class AlumniServlet extends HttpServlet {
         request.setAttribute("alumniNameArray", alumniName);
         request.setAttribute("alumniEmailArray", alumniEmail);
         request.setAttribute("alumniStateArray", alumniState);
-        request.setAttribute("alumniGraduationYearArray", alumniGraduationYear);
-        request.setAttribute("alumniBatchArray", alumniBatch);
+        request.setAttribute("alumniGraduationYearDiplomaArray", alumniGraduationYearDiploma);
+        request.setAttribute("alumniGraduationYearBachelorArray", alumniGraduationYearBachelor);
+        request.setAttribute("alumniGraduationYearMasterArray", alumniGraduationYearMaster);
         request.setAttribute("alumniProfStatusArray", alumniProfStatus);
         request.setAttribute("alumniCurJobArray", alumniCurJob);
         
@@ -598,15 +589,21 @@ public class AlumniServlet extends HttpServlet {
                 alumni.setPassword(result2.getString("password"));
                 alumni.setCreatedAt(result2.getDate("created_at"));
                 
-                alumni.setAlumniPersonalInfo(result1.getInt("alumniID"), result1.getString("alumniProfStatus"), 
+                alumni.setAlumniPersonalInfo(result1.getString("alumniID"), result1.getString("alumniProfStatus"), 
                         result1.getInt("alumniProfStatusYearGained"), result1.getString("alumniProfilePicture"));
                 
                 alumni.setAlumniAddress(result1.getString("alumniAddress1"), result1.getString("alumniAddress2"), 
                         result1.getString("alumniAddressCity"), result1.getString("alumniAddressPostCode"), 
                         result1.getString("alumniAddressState"), result1.getString("alumniAddressCountry"));
                 
-                alumni.setAlumniEducationalInfo(result1.getInt("alumniGraduateYear"), result1.getString("alumniDegree"), 
-                        result1.getString("alumniFieldOfSpecialization"), result1.getInt("alumniBatch"));
+                alumni.setAlumniEducationalInfoDiploma(result1.getInt("alumniGraduateYearDiploma"), result1.getInt("alumniStartStudyYearDiploma"), 
+                        result1.getString("alumniFieldOfSpecializationDiploma"), result1.getInt("alumniBatchDiploma"));
+                
+                alumni.setAlumniEducationalInfoBachelor(result1.getInt("alumniGraduateYearBachelor"), result1.getInt("alumniStartStudyYearBachelor"), 
+                        result1.getString("alumniFieldOfSpecializationBachelor"), result1.getInt("alumniBatchBachelor"));
+                
+                alumni.setAlumniEducationalInfoMaster(result1.getInt("alumniGraduateYearMaster"), result1.getInt("alumniStartStudyYearMaster"), 
+                        result1.getString("alumniFieldOfSpecializationMaster"), result1.getInt("alumniBatchMaster"));
                 
                 alumni.setAlumniEmploymentInfo(result1.getString("alumniPrevJob"), result1.getDouble("alumniPrevSalary"), 
                         result1.getString("alumniCurJob"), result1.getDouble("alumniCurSalary"), 
@@ -665,15 +662,21 @@ public class AlumniServlet extends HttpServlet {
                 alumni.setPassword(result2.getString("password"));
                 alumni.setCreatedAt(result2.getDate("created_at"));
                 
-                alumni.setAlumniPersonalInfo(result1.getInt("alumniID"), result1.getString("alumniProfStatus"), 
+                alumni.setAlumniPersonalInfo(result1.getString("alumniID"), result1.getString("alumniProfStatus"), 
                         result1.getInt("alumniProfStatusYearGained"), result1.getString("alumniProfilePicture"));
                 
                 alumni.setAlumniAddress(result1.getString("alumniAddress1"), result1.getString("alumniAddress2"), 
                         result1.getString("alumniAddressCity"), result1.getString("alumniAddressPostCode"), 
                         result1.getString("alumniAddressState"), result1.getString("alumniAddressCountry"));
                 
-                alumni.setAlumniEducationalInfo(result1.getInt("alumniGraduateYear"), result1.getString("alumniDegree"), 
-                        result1.getString("alumniFieldOfSpecialization"), result1.getInt("alumniBatch"));
+                alumni.setAlumniEducationalInfoDiploma(result1.getInt("alumniGraduateYearDiploma"), result1.getInt("alumniStartStudyYearDiploma"), 
+                        result1.getString("alumniFieldOfSpecializationDiploma"), result1.getInt("alumniBatchDiploma"));
+                
+                alumni.setAlumniEducationalInfoBachelor(result1.getInt("alumniGraduateYearBachelor"), result1.getInt("alumniStartStudyYearBachelor"), 
+                        result1.getString("alumniFieldOfSpecializationBachelor"), result1.getInt("alumniBatchBachelor"));
+                
+                alumni.setAlumniEducationalInfoMaster(result1.getInt("alumniGraduateYearMaster"), result1.getInt("alumniStartStudyYearMaster"), 
+                        result1.getString("alumniFieldOfSpecializationMaster"), result1.getInt("alumniBatchMaster"));
                 
                 alumni.setAlumniEmploymentInfo(result1.getString("alumniPrevJob"), result1.getDouble("alumniPrevSalary"), 
                         result1.getString("alumniCurJob"), result1.getDouble("alumniCurSalary"), 
@@ -698,7 +701,7 @@ public class AlumniServlet extends HttpServlet {
     private boolean saveUpdatedInfoIntoDatabase(HttpServletRequest request, HttpServletResponse response) {
         boolean status = false;
         try {
-            int currentAlumniID = currentAlumni.getAlumniID();
+            String currentAlumniID = currentAlumni.getAlumniID();
             
             String updatedAlumniProfStatus = request.getParameter("updatedAlumniProfStatus");
             int updatedAlumniProfStatusGainedYear = Integer.parseInt(request.getParameter("updatedAlumniProfStatusGainedYear"));
@@ -710,10 +713,20 @@ public class AlumniServlet extends HttpServlet {
             String updatedAlumniAddressState = request.getParameter("updatedAlumniAddressState");
             String updatedAlumniAddressCountry = request.getParameter("updatedAlumniAddressCountry");
 
-            String updatedAlumniFieldOfSpecialization = request.getParameter("updatedAlumniFieldOfSpecialization");
-            String updatedAlumniDegree = request.getParameter("updatedAlumniDegree");
-            int updatedAlumniBatch = Integer.parseInt(request.getParameter("updatedAlumniBatch"));
-            int updatedAlumniGraduateYear = Integer.parseInt(request.getParameter("updatedAlumniGraduateYear"));
+            String updatedAlumniFieldOfSpecializationDiploma = request.getParameter("updatedAlumniFieldOfSpecializationDiploma");
+            int updatedAlumniStartStudyDiploma = Integer.parseInt(request.getParameter("updatedAlumniStartStudyDiploma"));
+            int updatedAlumniBatchDiploma = Integer.parseInt(request.getParameter("updatedAlumniBatchDiploma"));
+            int updatedAlumniGraduateYearDiploma = Integer.parseInt(request.getParameter("updatedAlumniGraduateYearDiploma"));
+
+            String updatedAlumniFieldOfSpecializationBachelor = request.getParameter("updatedAlumniFieldOfSpecializationBachelor");
+            int updatedAlumniStartStudyBachelor = Integer.parseInt(request.getParameter("updatedAlumniStartStudyBachelor"));
+            int updatedAlumniBatchBachelor = Integer.parseInt(request.getParameter("updatedAlumniBatchBachelor"));
+            int updatedAlumniGraduateYearBachelor = Integer.parseInt(request.getParameter("updatedAlumniGraduateYearBachelor"));
+
+            String updatedAlumniFieldOfSpecializationMaster = request.getParameter("updatedAlumniFieldOfSpecializationMaster");
+            int updatedAlumniStartStudyMaster = Integer.parseInt(request.getParameter("updatedAlumniStartStudyMaster"));
+            int updatedAlumniBatchMaster = Integer.parseInt(request.getParameter("updatedAlumniBatchMaster"));
+            int updatedAlumniGraduateYearMaster = Integer.parseInt(request.getParameter("updatedAlumniGraduateYearMaster"));
 
             String updatedAlumniCurJob = request.getParameter("updatedAlumniCurJob");
             String updatedAlumniPrevJob = request.getParameter("updatedAlumniPrevJob");
@@ -740,25 +753,33 @@ public class AlumniServlet extends HttpServlet {
             statement.setString(4, updatedAlumniAddressCountry);
             statement.setString(5, updatedAlumniAddressPostCode);
             statement.setString(6, updatedAlumniAddressState);
-            statement.setInt(7, updatedAlumniBatch);
-            statement.setString(8, updatedAlumniCurEmployer);
-            statement.setString(9, updatedAlumniCurJob);
-            statement.setDouble(10, updatedAlumniCurSalary);
-            statement.setString(11, updatedAlumniDegree);
-            statement.setString(12, updatedAlumniFieldOfSpecialization);
-            statement.setInt(13, updatedAlumniGraduateYear);
-            statement.setString(14, updatedAlumniPrevEmployer);
-            statement.setString(15, updatedAlumniPrevJob);
-            statement.setDouble(16, updatedAlumniPrevSalary);
-            statement.setString(17, updatedAlumniProfStatus);
-            statement.setInt(18, updatedAlumniProfStatusGainedYear);
-            statement.setString(19, updatedEmployerAddress1);
-            statement.setString(20, updatedEmployerAddress2);
-            statement.setString(21, updatedEmployerAddressCity);
-            statement.setString(22, updatedEmployerAddressCountry);
-            statement.setString(23, updatedEmployerAddressPostCode);
-            statement.setString(24, updatedEmployerAddressState);
-            statement.setInt(25, currentAlumniID);
+            statement.setInt(7, updatedAlumniBatchDiploma);
+            statement.setInt(8, updatedAlumniBatchBachelor);
+            statement.setInt(9, updatedAlumniBatchMaster);
+            statement.setString(10, updatedAlumniCurEmployer);
+            statement.setString(11, updatedAlumniCurJob);
+            statement.setDouble(12, updatedAlumniCurSalary);
+            statement.setInt(13, updatedAlumniStartStudyDiploma);
+            statement.setInt(14, updatedAlumniStartStudyBachelor);
+            statement.setInt(15, updatedAlumniStartStudyMaster);
+            statement.setString(16, updatedAlumniFieldOfSpecializationDiploma);
+            statement.setString(17, updatedAlumniFieldOfSpecializationBachelor);
+            statement.setString(18, updatedAlumniFieldOfSpecializationMaster);
+            statement.setInt(19, updatedAlumniGraduateYearDiploma);
+            statement.setInt(20, updatedAlumniGraduateYearBachelor);
+            statement.setInt(21, updatedAlumniGraduateYearMaster);
+            statement.setString(22, updatedAlumniPrevEmployer);
+            statement.setString(23, updatedAlumniPrevJob);
+            statement.setDouble(24, updatedAlumniPrevSalary);
+            statement.setString(25, updatedAlumniProfStatus);
+            statement.setInt(26, updatedAlumniProfStatusGainedYear);
+            statement.setString(27, updatedEmployerAddress1);
+            statement.setString(28, updatedEmployerAddress2);
+            statement.setString(29, updatedEmployerAddressCity);
+            statement.setString(30, updatedEmployerAddressCountry);
+            statement.setString(31, updatedEmployerAddressPostCode);
+            statement.setString(32, updatedEmployerAddressState);
+            statement.setString(33, currentAlumniID);
             
             int result = statement.executeUpdate();
             
@@ -776,7 +797,9 @@ public class AlumniServlet extends HttpServlet {
                 currentAlumni.setAlumniAddress(updatedAlumniAddress1, updatedAlumniAddress2, updatedAlumniAddressCity, 
                         updatedAlumniAddressPostCode, updatedAlumniAddressState, updatedAlumniAddressCountry);
                 
-                currentAlumni.setAlumniEducationalInfo(updatedAlumniGraduateYear, updatedAlumniDegree, updatedAlumniFieldOfSpecialization, updatedAlumniBatch);
+                currentAlumni.setAlumniEducationalInfoDiploma(updatedAlumniGraduateYearDiploma, updatedAlumniStartStudyDiploma, updatedAlumniFieldOfSpecializationDiploma, updatedAlumniBatchDiploma);
+                currentAlumni.setAlumniEducationalInfoBachelor(updatedAlumniGraduateYearBachelor, updatedAlumniStartStudyBachelor, updatedAlumniFieldOfSpecializationBachelor, updatedAlumniBatchBachelor);
+                currentAlumni.setAlumniEducationalInfoMaster(updatedAlumniGraduateYearMaster, updatedAlumniStartStudyMaster, updatedAlumniFieldOfSpecializationMaster, updatedAlumniBatchMaster);
                 
                 currentAlumni.setAlumniEmploymentInfo(updatedAlumniPrevJob, updatedAlumniPrevSalary, updatedAlumniCurJob, updatedAlumniCurSalary, 
                         updatedAlumniPrevEmployer, updatedAlumniCurEmployer);
@@ -785,7 +808,7 @@ public class AlumniServlet extends HttpServlet {
                         updatedEmployerAddressPostCode, updatedEmployerAddressState, updatedEmployerAddressCountry);
                 
                 for(int i = 0; i < totalAlumni; i++) {
-                    if(alumniList.get(i).getAlumniID() == currentAlumniID) {
+                    if(alumniList.get(i).getAlumniID().equals(currentAlumniID)) {
                         alumniList.set(i, currentAlumni);
                         break;
                     }
@@ -802,7 +825,7 @@ public class AlumniServlet extends HttpServlet {
     private boolean saveUpdatedProfilePictureIntoDatabase(String pictureName) {
         boolean status = false;
         try {
-            int currentAlumniID = currentAlumni.getAlumniID();
+            String currentAlumniID = currentAlumni.getAlumniID();
             
             Connection con = new Database().getCon();
             
@@ -810,7 +833,7 @@ public class AlumniServlet extends HttpServlet {
             PreparedStatement statement = con.prepareStatement(statementQuery);
             
             statement.setString(1, pictureName);
-            statement.setInt(2, currentAlumniID);
+            statement.setString(2, currentAlumniID);
             
             int result = statement.executeUpdate();
             
@@ -843,7 +866,7 @@ public class AlumniServlet extends HttpServlet {
     private boolean deleteAlumniAccountFromDatabase(HttpServletRequest request, HttpServletResponse response) {
         boolean status = false;
         try {
-            int currentAlumniID = currentAlumni.getAlumniID();
+            String currentAlumniID = currentAlumni.getAlumniID();
             
             Connection con = new Database().getCon();
             
@@ -853,8 +876,8 @@ public class AlumniServlet extends HttpServlet {
             PreparedStatement statement1 = con.prepareStatement(statementQuery1);
             PreparedStatement statement2 = con.prepareStatement(statementQuery2);
             
-            statement1.setInt(1, currentAlumniID);
-            statement2.setInt(1, currentAlumniID);
+            statement1.setString(1, currentAlumniID);
+            statement2.setString(1, currentAlumniID);
             
             int result1 = statement1.executeUpdate();
             int result2 = statement2.executeUpdate();

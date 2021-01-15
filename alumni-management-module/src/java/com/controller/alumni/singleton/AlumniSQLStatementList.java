@@ -11,15 +11,19 @@ package com.controller.alumni.singleton;
  */
 public interface AlumniSQLStatementList {
     // RETRIEVE SQL STATEMENT
+    
     String SQL_STATEMENT_RETRIEVE_ALL_FROM_TABLE_ALUMNI = "SELECT * FROM alumni;";
     String SQL_STATEMENT_RETRIEVE_ALL_FROM_TABLE_USER_WHERE_ROLE_IS_ALUMNI = "SELECT * FROM user WHERE role = 'alumni';";
     
     // UPDATE SQL STATEMENT
     String SQL_STATEMENT_UPDATE_SELECTED_ALUMNI_INFO = "UPDATE `alumni` "
             + "SET `alumniAddress1` = ?, `alumniAddress2` = ?, `alumniAddressCity` = ?, `alumniAddressCountry` = ?, "
-                + "`alumniAddressPostCode` = ?, `alumniAddressState` = ?, `alumniBatch` = ?, `alumniCurEmployer` = ?, "
-                + "`alumniCurJob` = ?, `alumniCurSalary` = ?, `alumniDegree` = ?, `alumniFieldOfSpecialization` = ?, "
-                + "`alumniGraduateYear` = ?, `alumniPrevEmployer` = ?, `alumniPrevJob` = ?, `alumniPrevSalary` = ?, "
+                + "`alumniAddressPostCode` = ?, `alumniAddressState` = ?, `alumniBatchDiploma` = ?, `alumniBatchBachelor` = ?, "
+                + "`alumniBatchMaster` = ?, `alumniCurEmployer` = ?, `alumniCurJob` = ?, `alumniCurSalary` = ?, "
+                + "`alumniStartStudyYearDiploma` = ?, `alumniStartStudyYearBachelor` = ?, `alumniStartStudyYearMaster` = ?, "
+                + "`alumniFieldOfSpecializationDiploma` = ?, `alumniFieldOfSpecializationBachelor` = ?, `alumniFieldOfSpecializationMaster` = ?, "
+                + "`alumniGraduateYearDiploma` = ?, `alumniGraduateYearBachelor` = ?, `alumniGraduateYearMaster` = ?, `alumniPrevEmployer` = ?, "
+                + "`alumniPrevJob` = ?, `alumniPrevSalary` = ?, "
                 + "`alumniProfStatus` = ?, `alumniProfStatusYearGained` = ?, `employerAddress1` = ?, `employerAddress2` = ?, "
                 + "`employerAddressCity` = ?, `employerAddressCountry` = ?, `employerAddressPostCode` = ?, `employerAddressState` = ? "
             + "WHERE `alumni`.`alumniID` = ?;";

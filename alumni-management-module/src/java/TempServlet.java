@@ -44,7 +44,7 @@ public class TempServlet extends HttpServlet {
             else if(userType.equalsIgnoreCase("alumni")) {
                 session.setAttribute("currentUserType", "alumni");
                 
-                int id = Integer.parseInt(request.getParameter("alumniID"));
+                String id = request.getParameter("alumniID");
                 
                 session.setAttribute("currentAlumniID", id);
             }

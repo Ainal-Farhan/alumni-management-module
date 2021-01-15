@@ -22,14 +22,26 @@ public class Alumni extends User implements Serializable{
     private String alumniAddressCountry;
     private String alumniAddressPostCode;
     private String alumniAddressState;
-    private int alumniBatch;
     private String alumniCurEmployer;
     private String alumniCurJob;
     private double alumniCurSalary;
-    private String alumniDegree;
-    private String alumniFieldOfSpecialization;
-    private int alumniGraduateYear;
-    private int alumniID;
+    
+    private String alumniFieldOfSpecializationDiploma;
+    private int alumniGraduateYearDiploma;
+    private int alumniStartStudyYearDiploma;
+    private int alumniBatchDiploma;
+    
+    private String alumniFieldOfSpecializationBachelor;
+    private int alumniGraduateYearBachelor;
+    private int alumniStartStudyYearBachelor;
+    private int alumniBatchBachelor;
+    
+    private String alumniFieldOfSpecializationMaster;
+    private int alumniGraduateYearMaster;
+    private int alumniStartStudyYearMaster;
+    private int alumniBatchMaster;
+    
+    private String alumniID;
     private String alumniPrevEmployer;
     private String alumniPrevJob;
     private double alumniPrevSalary;
@@ -47,41 +59,6 @@ public class Alumni extends User implements Serializable{
 
     // Get Alumni Personal Information
     
-    public int getAlumniID(){    return this.alumniID; }
-    public String getAlumniProfilePicture(){    return this.alumniProfilePicture; }
-    public String getAlumniProfStatus(){    return this.alumniProfStatus; }
-    public int getAlumniProfStatusYearGained(){ return this.alumniProfStatusYearGained; }
-    
-    public String getAlumniAddress1(){  return this.alumniAddress1; }
-    public String getAlumniAddress2(){  return this.alumniAddress2; }
-    public String getAlumniAddressCity(){   return this.alumniAddressCity; }
-    public String getAlumniAddressCountry(){    return this.alumniAddressCountry; }
-    public String getAlumniAddressPostCode(){   return this.alumniAddressPostCode; }
-    public String getAlumniAddressState(){  return this.alumniAddressState; }    
-
-    // Get Alumni Educational Information
-    public int getAlumniBatch(){    return this.alumniBatch; }
-    public String getAlumniDegree(){    return this.alumniDegree; }
-    public String getAlumniFieldOfSpecialization(){ return this.alumniFieldOfSpecialization; }
-    public int getAlumniGraduateYear(){ return this.alumniGraduateYear; }
-    
-    // Get Alumni Employment Information
-
-    public String getAlumniCurEmployer(){   return this.alumniCurEmployer; }
-    public String getAlumniCurJob(){    return this.alumniCurJob; }
-    public double getAlumniCurSalary(){ return this.alumniCurSalary; }
-
-    public String getAlumniPrevEmployer(){  return this.alumniPrevEmployer; }
-    public String getAlumniPrevJob(){   return this.alumniPrevJob; }
-    public double getAlumniPrevSalary(){    return this.alumniPrevSalary; }
-
-    public String getEmployerAddress1(){    return this.employerAddress1; }
-    public String getEmployerAddress2(){    return this.employerAddress2; }
-    public String getEmployerAddressCity(){ return this.employerAddressCity; }
-    public String getEmployerAddressCountry(){  return this.employerAddressCountry; }
-    public String getEmployerAddressPostCode(){ return this.employerAddressPostCode; }
-    public String getEmployerAddressState(){    return this.employerAddressState; }
-
     /**
      *
      * @param address1
@@ -103,15 +80,27 @@ public class Alumni extends User implements Serializable{
     /**
      *
      * @param alumniGraduateYear
-     * @param alumniDegree
+     * @param alumniStartStudy
      * @param alumniFieldOfSpecialization
      * @param alumniBatch
      */
-    public void setAlumniEducationalInfo(int alumniGraduateYear, String alumniDegree, String alumniFieldOfSpecialization, int alumniBatch){
-        this.alumniGraduateYear = alumniGraduateYear;
-        this.alumniDegree = alumniDegree;
-        this.alumniFieldOfSpecialization = alumniFieldOfSpecialization;
-        this.alumniBatch = alumniBatch;
+    public void setAlumniEducationalInfoDiploma(int alumniGraduateYear, int alumniStartStudy, String alumniFieldOfSpecialization, int alumniBatch){
+        this.alumniGraduateYearDiploma = alumniGraduateYear;
+        this.alumniStartStudyYearDiploma = alumniStartStudy;
+        this.alumniFieldOfSpecializationDiploma = alumniFieldOfSpecialization;
+        this.alumniBatchDiploma = alumniBatch;
+    }
+    public void setAlumniEducationalInfoBachelor(int alumniGraduateYear, int alumniStartStudy, String alumniFieldOfSpecialization, int alumniBatch){
+        this.alumniGraduateYearBachelor = alumniGraduateYear;
+        this.alumniStartStudyYearBachelor = alumniStartStudy;
+        this.alumniFieldOfSpecializationBachelor = alumniFieldOfSpecialization;
+        this.alumniBatchBachelor = alumniBatch;
+    }
+    public void setAlumniEducationalInfoMaster(int alumniGraduateYear, int alumniStartStudy, String alumniFieldOfSpecialization, int alumniBatch){
+        this.alumniGraduateYearMaster = alumniGraduateYear;
+        this.alumniStartStudyYearMaster = alumniStartStudy;
+        this.alumniFieldOfSpecializationMaster = alumniFieldOfSpecialization;
+        this.alumniBatchMaster = alumniBatch;
     }
 
     /**
@@ -143,7 +132,7 @@ public class Alumni extends User implements Serializable{
      * @param alumniPhoneNumber
      * @param alumniProfilePicture
      */
-    public void setAlumniPersonalInfo(int alumniID, String alumniProfStatus, int alumniProfStatusYearGained, String alumniProfilePicture){
+    public void setAlumniPersonalInfo(String alumniID, String alumniProfStatus, int alumniProfStatusYearGained, String alumniProfilePicture){
         this.alumniID = alumniID;
         this.alumniProfStatus = alumniProfStatus;
         this.alumniProfStatusYearGained = alumniProfStatusYearGained;
@@ -168,5 +157,140 @@ public class Alumni extends User implements Serializable{
         this.employerAddressCountry = country;
     }
 
+    public String getAlumniAddress1() {
+        return alumniAddress1;
+    }
+
+    public String getAlumniAddress2() {
+        return alumniAddress2;
+    }
+
+    public String getAlumniAddressCity() {
+        return alumniAddressCity;
+    }
+
+    public String getAlumniAddressCountry() {
+        return alumniAddressCountry;
+    }
+
+    public String getAlumniAddressPostCode() {
+        return alumniAddressPostCode;
+    }
+
+    public String getAlumniAddressState() {
+        return alumniAddressState;
+    }
+
+    public String getAlumniCurEmployer() {
+        return alumniCurEmployer;
+    }
+
+    public String getAlumniCurJob() {
+        return alumniCurJob;
+    }
+
+    public double getAlumniCurSalary() {
+        return alumniCurSalary;
+    }
+
+    public String getAlumniFieldOfSpecializationDiploma() {
+        return alumniFieldOfSpecializationDiploma;
+    }
+
+    public int getAlumniGraduateYearDiploma() {
+        return alumniGraduateYearDiploma;
+    }
+
+    public int getAlumniStartStudyYearDiploma() {
+        return alumniStartStudyYearDiploma;
+    }
+
+    public int getAlumniBatchDiploma() {
+        return alumniBatchDiploma;
+    }
+
+    public String getAlumniFieldOfSpecializationBachelor() {
+        return alumniFieldOfSpecializationBachelor;
+    }
+
+    public int getAlumniGraduateYearBachelor() {
+        return alumniGraduateYearBachelor;
+    }
+
+    public int getAlumniStartStudyYearBachelor() {
+        return alumniStartStudyYearBachelor;
+    }
+
+    public int getAlumniBatchBachelor() {
+        return alumniBatchBachelor;
+    }
+
+    public String getAlumniFieldOfSpecializationMaster() {
+        return alumniFieldOfSpecializationMaster;
+    }
+
+    public int getAlumniGraduateYearMaster() {
+        return alumniGraduateYearMaster;
+    }
+
+    public int getAlumniStartStudyYearMaster() {
+        return alumniStartStudyYearMaster;
+    }
+
+    public int getAlumniBatchMaster() {
+        return alumniBatchMaster;
+    }
+
+    public String getAlumniID() {
+        return alumniID;
+    }
+
+    public String getAlumniPrevEmployer() {
+        return alumniPrevEmployer;
+    }
+
+    public String getAlumniPrevJob() {
+        return alumniPrevJob;
+    }
+
+    public double getAlumniPrevSalary() {
+        return alumniPrevSalary;
+    }
+
+    public String getAlumniProfilePicture() {
+        return alumniProfilePicture;
+    }
+
+    public String getAlumniProfStatus() {
+        return alumniProfStatus;
+    }
+
+    public int getAlumniProfStatusYearGained() {
+        return alumniProfStatusYearGained;
+    }
+
+    public String getEmployerAddress1() {
+        return employerAddress1;
+    }
+
+    public String getEmployerAddress2() {
+        return employerAddress2;
+    }
+
+    public String getEmployerAddressCity() {
+        return employerAddressCity;
+    }
+
+    public String getEmployerAddressCountry() {
+        return employerAddressCountry;
+    }
+
+    public String getEmployerAddressPostCode() {
+        return employerAddressPostCode;
+    }
+
+    public String getEmployerAddressState() {
+        return employerAddressState;
+    }
 }
 

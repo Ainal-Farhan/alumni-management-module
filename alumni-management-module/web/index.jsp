@@ -30,7 +30,7 @@
                 <option value="alumni">Alumni</option>
             </select>
             
-            <input type="number" min="1" name="alumniID" placeholder="alumni ID" id="inputAlumniID" style="display:none;">
+            <input type="text" name="alumniID" placeholder="alumni ID" id="inputAlumniID" style="display:none;">
             
             <input type="submit" value="Change">
         </form>

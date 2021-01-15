@@ -1,15 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3307
--- Generation Time: Dec 29, 2020 at 09:57 AM
--- Server version: 10.4.13-MariaDB
--- PHP Version: 7.4.8
+-- Generation Time: Jan 15, 2021 at 09:02 AM
+-- Server version: 10.4.17-MariaDB
+-- PHP Version: 8.0.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
-SET time_zone = "+08:00";
+SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -28,41 +28,49 @@ SET time_zone = "+08:00";
 --
 
 CREATE TABLE `alumni` (
-  `alumniID` int(11) NOT NULL,
+  `alumniID` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `alumniAddress1` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
   `alumniAddress2` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
   `alumniAddressCity` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
   `alumniAddressCountry` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
   `alumniAddressPostCode` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '00000',
   `alumniAddressState` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
-  `alumniBatch` int(11) NOT NULL DEFAULT 0,
+  `alumniBatchBachelor` int(11) NOT NULL DEFAULT 0,
   `alumniCurEmployer` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
   `alumniCurJob` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
   `alumniCurSalary` double NOT NULL DEFAULT 0,
-  `alumniDegree` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
-  `alumniFieldOfSpecialization` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
-  `alumniGraduateYear` year(4) NOT NULL DEFAULT 0000,
+  `alumniFieldOfSpecializationBachelor` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '-',
+  `alumniGraduateYearBachelor` year(4) NOT NULL DEFAULT 0000,
   `alumniPrevEmployer` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
   `alumniPrevJob` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
   `alumniPrevSalary` double NOT NULL DEFAULT 0,
   `alumniProfilePicture` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'default.png',
   `alumniProfStatus` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Sir',
   `alumniProfStatusYearGained` year(4) NOT NULL DEFAULT 0000,
+  `alumniStartStudyYearBachelor` year(4) NOT NULL DEFAULT 0000,
   `employerAddress1` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
   `employerAddress2` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
   `employerAddressCity` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
   `employerAddressCountry` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
   `employerAddressPostCode` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '00000',
-  `employerAddressState` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none'
+  `employerAddressState` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
+  `alumniFieldOfSpecializationDiploma` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '-',
+  `alumniGraduateYearDiploma` year(4) NOT NULL DEFAULT 0000,
+  `alumniBatchDiploma` int(11) NOT NULL DEFAULT 0,
+  `alumniStartStudyYearDiploma` year(4) NOT NULL DEFAULT 0000,
+  `alumniFieldOfSpecializationMaster` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '-',
+  `alumniGraduateYearMaster` year(4) NOT NULL DEFAULT 0000,
+  `alumniBatchMaster` int(11) NOT NULL DEFAULT 0,
+  `alumniStartStudyYearMaster` year(4) NOT NULL DEFAULT 0000
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `alumni`
 --
 
-INSERT INTO `alumni` (`alumniID`, `alumniAddress1`, `alumniAddress2`, `alumniAddressCity`, `alumniAddressCountry`, `alumniAddressPostCode`, `alumniAddressState`, `alumniBatch`, `alumniCurEmployer`, `alumniCurJob`, `alumniCurSalary`, `alumniDegree`, `alumniFieldOfSpecialization`, `alumniGraduateYear`, `alumniPrevEmployer`, `alumniPrevJob`, `alumniPrevSalary`, `alumniProfilePicture`, `alumniProfStatus`, `alumniProfStatusYearGained`, `employerAddress1`, `employerAddress2`, `employerAddressCity`, `employerAddressCountry`, `employerAddressPostCode`, `employerAddressState`) VALUES
-(1, 'none', 'none', 'none', 'none', '00000', 'none', 3, 'none', 'none', 0, 'none', 'none', 2003, 'none', 'none', 0, 'default.png', 'Sir', 2006, 'none', 'none', 'none', 'none', 'none', '00000'),
-(4, 'none', 'none', 'none', 'none', '00000', 'none', 0, 'none', 'none', 0, 'none', 'none', 0000, 'none', 'none', 0, 'default.png', 'Sir', 0000, 'none', 'none', 'none', 'none', '00000', 'none');
+INSERT INTO `alumni` (`alumniID`, `alumniAddress1`, `alumniAddress2`, `alumniAddressCity`, `alumniAddressCountry`, `alumniAddressPostCode`, `alumniAddressState`, `alumniBatchBachelor`, `alumniCurEmployer`, `alumniCurJob`, `alumniCurSalary`, `alumniFieldOfSpecializationBachelor`, `alumniGraduateYearBachelor`, `alumniPrevEmployer`, `alumniPrevJob`, `alumniPrevSalary`, `alumniProfilePicture`, `alumniProfStatus`, `alumniProfStatusYearGained`, `alumniStartStudyYearBachelor`, `employerAddress1`, `employerAddress2`, `employerAddressCity`, `employerAddressCountry`, `employerAddressPostCode`, `employerAddressState`, `alumniFieldOfSpecializationDiploma`, `alumniGraduateYearDiploma`, `alumniBatchDiploma`, `alumniStartStudyYearDiploma`, `alumniFieldOfSpecializationMaster`, `alumniGraduateYearMaster`, `alumniBatchMaster`, `alumniStartStudyYearMaster`) VALUES
+('1', 'Peace YALL', 'none', 'none', 'none', '00000', 'none', 6, 'none', 'none', 0, 'noneeqwe', 2010, 'none', 'none', 0, 'default.png', 'Sir', 2006, 2012, 'none', 'none', 'none', 'none', '00000', 'none', 'eqweqw', 2009, 8, 2011, '-eqweq', 2015, 9, 2013),
+('4', 'none', 'none', 'none', 'none', '00000', 'none', 0, 'none', 'none', 0, 'none', 0000, 'none', 'none', 0, 'default.png', 'Sir', 0000, 2000, 'none', 'none', 'none', 'none', '00000', 'none', '-', 2000, 0, 2000, '-', 2000, 0, 2000);
 
 -- --------------------------------------------------------
 
@@ -115,7 +123,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
