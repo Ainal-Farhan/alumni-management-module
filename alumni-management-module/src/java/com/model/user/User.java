@@ -12,7 +12,7 @@ import java.sql.Date;
  *
  * @author PC
  */
-public class User implements Serializable{
+public class User implements Serializable {
     private int id;
     private String name;
     private String phone;
@@ -76,6 +76,4 @@ public class User implements Serializable{
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
-    
-    
 }

@@ -149,7 +149,7 @@
                     <table class="table table-striped">
                         <thead class="thead-dark">
                             <tr>
-                                <th colspan="2" style="text-align: center;">
+                                <th colspan="4" style="text-align: center;">
                                     Educational Information
                                 </th>
                             </tr>

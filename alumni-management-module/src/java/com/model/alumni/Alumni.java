@@ -6,7 +6,6 @@
 package com.model.alumni;
 
 import com.model.user.User;
-import com.model.user.User;
 import java.io.Serializable;
 
 /**
@@ -14,7 +13,7 @@ import java.io.Serializable;
  * @version 1.0
  * @created 27-Dec-2020 9:28:30 PM
  */
-public class Alumni extends User implements Serializable{
+public class Alumni extends User implements Serializable {
 
     private String alumniAddress1;
     private String alumniAddress2;
@@ -25,22 +24,22 @@ public class Alumni extends User implements Serializable{
     private String alumniCurEmployer;
     private String alumniCurJob;
     private double alumniCurSalary;
-    
+
     private String alumniFieldOfSpecializationDiploma;
     private int alumniGraduateYearDiploma;
     private int alumniStartStudyYearDiploma;
     private int alumniBatchDiploma;
-    
+
     private String alumniFieldOfSpecializationBachelor;
     private int alumniGraduateYearBachelor;
     private int alumniStartStudyYearBachelor;
     private int alumniBatchBachelor;
-    
+
     private String alumniFieldOfSpecializationMaster;
     private int alumniGraduateYearMaster;
     private int alumniStartStudyYearMaster;
     private int alumniBatchMaster;
-    
+
     private String alumniID;
     private String alumniPrevEmployer;
     private String alumniPrevJob;
@@ -55,10 +54,10 @@ public class Alumni extends User implements Serializable{
     private String employerAddressPostCode;
     private String employerAddressState;
 
-    public Alumni(){}
+    public Alumni() {
+    }
 
     // Get Alumni Personal Information
-    
     /**
      *
      * @param address1
@@ -68,7 +67,7 @@ public class Alumni extends User implements Serializable{
      * @param state
      * @param country
      */
-    public void setAlumniAddress(String address1, String address2, String city, String postCode, String state, String country){
+    public void setAlumniAddress(String address1, String address2, String city, String postCode, String state, String country) {
         this.alumniAddress1 = address1;
         this.alumniAddress2 = address2;
         this.alumniAddressCity = city;
@@ -84,19 +83,21 @@ public class Alumni extends User implements Serializable{
      * @param alumniFieldOfSpecialization
      * @param alumniBatch
      */
-    public void setAlumniEducationalInfoDiploma(int alumniGraduateYear, int alumniStartStudy, String alumniFieldOfSpecialization, int alumniBatch){
+    public void setAlumniEducationalInfoDiploma(int alumniGraduateYear, int alumniStartStudy, String alumniFieldOfSpecialization, int alumniBatch) {
         this.alumniGraduateYearDiploma = alumniGraduateYear;
         this.alumniStartStudyYearDiploma = alumniStartStudy;
         this.alumniFieldOfSpecializationDiploma = alumniFieldOfSpecialization;
         this.alumniBatchDiploma = alumniBatch;
     }
-    public void setAlumniEducationalInfoBachelor(int alumniGraduateYear, int alumniStartStudy, String alumniFieldOfSpecialization, int alumniBatch){
+
+    public void setAlumniEducationalInfoBachelor(int alumniGraduateYear, int alumniStartStudy, String alumniFieldOfSpecialization, int alumniBatch) {
         this.alumniGraduateYearBachelor = alumniGraduateYear;
         this.alumniStartStudyYearBachelor = alumniStartStudy;
         this.alumniFieldOfSpecializationBachelor = alumniFieldOfSpecialization;
         this.alumniBatchBachelor = alumniBatch;
     }
-    public void setAlumniEducationalInfoMaster(int alumniGraduateYear, int alumniStartStudy, String alumniFieldOfSpecialization, int alumniBatch){
+
+    public void setAlumniEducationalInfoMaster(int alumniGraduateYear, int alumniStartStudy, String alumniFieldOfSpecialization, int alumniBatch) {
         this.alumniGraduateYearMaster = alumniGraduateYear;
         this.alumniStartStudyYearMaster = alumniStartStudy;
         this.alumniFieldOfSpecializationMaster = alumniFieldOfSpecialization;
@@ -112,7 +113,7 @@ public class Alumni extends User implements Serializable{
      * @param prevEmployer
      * @param curEmployer
      */
-    public void setAlumniEmploymentInfo(String prevJob, double prevSalary, String curJob, double curSalary, String prevEmployer, String curEmployer){
+    public void setAlumniEmploymentInfo(String prevJob, double prevSalary, String curJob, double curSalary, String prevEmployer, String curEmployer) {
         this.alumniPrevJob = prevJob;
         this.alumniPrevSalary = prevSalary;
         this.alumniPrevEmployer = prevEmployer;
@@ -132,7 +133,7 @@ public class Alumni extends User implements Serializable{
      * @param alumniPhoneNumber
      * @param alumniProfilePicture
      */
-    public void setAlumniPersonalInfo(String alumniID, String alumniProfStatus, int alumniProfStatusYearGained, String alumniProfilePicture){
+    public void setAlumniPersonalInfo(String alumniID, String alumniProfStatus, int alumniProfStatusYearGained, String alumniProfilePicture) {
         this.alumniID = alumniID;
         this.alumniProfStatus = alumniProfStatus;
         this.alumniProfStatusYearGained = alumniProfStatusYearGained;
@@ -148,7 +149,7 @@ public class Alumni extends User implements Serializable{
      * @param country
      * @param postCode
      */
-    public void setEmployerAddress(String address1, String address2, String city, String state, String country, String postCode){
+    public void setEmployerAddress(String address1, String address2, String city, String state, String country, String postCode) {
         this.employerAddress1 = address1;
         this.employerAddress2 = address2;
         this.employerAddressCity = city;
@@ -293,4 +294,3 @@ public class Alumni extends User implements Serializable{
         return employerAddressState;
     }
 }
-
