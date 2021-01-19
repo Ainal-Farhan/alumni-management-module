@@ -153,7 +153,7 @@ public class AlumniServlet extends HttpServlet {
 
                 out.println("<script>alert('Heroku does not allow creating new file(images) inside the web-app');</script>");
 
-                setAttributesForCurrentAlumni(request, response);
+                setAttributesForCurrentAlumni(request, response, "update");
                 new Route().includePage(request, response, AlumniPageList.UPDATE_ALUMNI_INFO_PAGE);
             } else if (requestType.equals(AlumniRequestTypeList.REQUEST_TYPE_MANAGE_ALUMNUS_ALUMNA_INFO)) {
                 if (setCurrentAlumni(request)) {
@@ -369,14 +369,14 @@ public class AlumniServlet extends HttpServlet {
 
     private void processViewUpdateAlumniInfoPage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        setAttributesForCurrentAlumni(request, response);
+        setAttributesForCurrentAlumni(request, response, "update");
 
         new Route().forwardPage(request, response, AlumniPageList.UPDATE_ALUMNI_INFO_PAGE);
     }
 
     private void processViewDeleteAlumniInfoPage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        setAttributesForCurrentAlumni(request, response);
+        setAttributesForCurrentAlumni(request, response, "delete");
 
         new Route().forwardPage(request, response, AlumniPageList.DELETE_ALUMNI_INFO_PAGE);
     }
@@ -393,8 +393,8 @@ public class AlumniServlet extends HttpServlet {
             }
         }
 
-        setAttributesForCurrentAlumni(request, response);
-
+        setAttributesForCurrentAlumni(request, response, "view");
+        
         new Route().forwardPage(request, response, AlumniPageList.MANAGE_ALUMNI_INFO_PAGE);
     }
 
@@ -415,7 +415,7 @@ public class AlumniServlet extends HttpServlet {
         }
     }
 
-    private void setAttributesForCurrentAlumni(HttpServletRequest request, HttpServletResponse response)
+    private void setAttributesForCurrentAlumni(HttpServletRequest request, HttpServletResponse response, String manageAlumniProcess)
             throws ServletException, IOException {
         request.setAttribute("id", currentAlumni.getAlumniID());
         request.setAttribute("name", currentAlumni.getName());
@@ -461,6 +461,8 @@ public class AlumniServlet extends HttpServlet {
         request.setAttribute("employerAddressCountry", currentAlumni.getEmployerAddressCountry());
         request.setAttribute("employerAddressPostCode", currentAlumni.getEmployerAddressPostCode());
         request.setAttribute("employerAddressState", currentAlumni.getEmployerAddressState());
+        
+        request.setAttribute("manageAlumniProcess", manageAlumniProcess);
     }
 
     private void processViewAlumniList(HttpServletRequest request, HttpServletResponse response)
@@ -554,13 +556,12 @@ public class AlumniServlet extends HttpServlet {
             while (result1.next() && result2.next()) {
                 Alumni alumni = new Alumni();
 
-                alumni.setId(result2.getInt("id"));
+                alumni.setUserID(result2.getString("userID"));
                 alumni.setName(result2.getString("name"));
                 alumni.setPhone(result2.getString("phone"));
                 alumni.setEmail(result2.getString("email"));
                 alumni.setRole(result2.getString("role"));
                 alumni.setPassword(result2.getString("password"));
-                alumni.setCreatedAt(result2.getDate("created_at"));
 
                 alumni.setAlumniPersonalInfo(result1.getString("alumniID"), result1.getString("alumniProfStatus"),
                         result1.getInt("alumniProfStatusYearGained"), result1.getString("alumniProfilePicture"));
@@ -626,14 +627,13 @@ public class AlumniServlet extends HttpServlet {
 
             while (result1.next() && result2.next()) {
                 Alumni alumni = new Alumni();
-
-                alumni.setId(result2.getInt("id"));
+                
+                alumni.setUserID(result2.getString("userID"));
                 alumni.setName(result2.getString("name"));
                 alumni.setPhone(result2.getString("phone"));
                 alumni.setEmail(result2.getString("email"));
                 alumni.setRole(result2.getString("role"));
                 alumni.setPassword(result2.getString("password"));
-                alumni.setCreatedAt(result2.getDate("created_at"));
 
                 alumni.setAlumniPersonalInfo(result1.getString("alumniID"), result1.getString("alumniProfStatus"),
                         result1.getInt("alumniProfStatusYearGained"), result1.getString("alumniProfilePicture"));
@@ -899,18 +899,6 @@ public class AlumniServlet extends HttpServlet {
 
             out.close();
         }
-    }
-
-    @Override
-    protected void doPut(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**

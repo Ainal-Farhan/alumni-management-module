@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3307
--- Generation Time: Jan 15, 2021 at 09:02 AM
+-- Generation Time: Jan 19, 2021 at 11:36 AM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 8.0.0
 
@@ -28,32 +28,32 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `alumni` (
-  `alumniID` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `alumniAddress1` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
-  `alumniAddress2` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
-  `alumniAddressCity` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
-  `alumniAddressCountry` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
-  `alumniAddressPostCode` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '00000',
-  `alumniAddressState` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
+  `alumniID` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `alumniAddress1` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '-',
+  `alumniAddress2` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '-',
+  `alumniAddressCity` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '-',
+  `alumniAddressCountry` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '-',
+  `alumniAddressPostCode` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '-',
+  `alumniAddressState` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '-',
   `alumniBatchBachelor` int(11) NOT NULL DEFAULT 0,
-  `alumniCurEmployer` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
-  `alumniCurJob` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
+  `alumniCurEmployer` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '-',
+  `alumniCurJob` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '-',
   `alumniCurSalary` double NOT NULL DEFAULT 0,
   `alumniFieldOfSpecializationBachelor` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '-',
   `alumniGraduateYearBachelor` year(4) NOT NULL DEFAULT 0000,
-  `alumniPrevEmployer` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
-  `alumniPrevJob` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
+  `alumniPrevEmployer` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '-',
+  `alumniPrevJob` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '-',
   `alumniPrevSalary` double NOT NULL DEFAULT 0,
   `alumniProfilePicture` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'default.png',
-  `alumniProfStatus` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Sir',
+  `alumniProfStatus` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '-',
   `alumniProfStatusYearGained` year(4) NOT NULL DEFAULT 0000,
   `alumniStartStudyYearBachelor` year(4) NOT NULL DEFAULT 0000,
-  `employerAddress1` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
-  `employerAddress2` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
-  `employerAddressCity` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
-  `employerAddressCountry` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
-  `employerAddressPostCode` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '00000',
-  `employerAddressState` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
+  `employerAddress1` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '-',
+  `employerAddress2` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '-',
+  `employerAddressCity` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '-',
+  `employerAddressCountry` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '-',
+  `employerAddressPostCode` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '-',
+  `employerAddressState` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '-',
   `alumniFieldOfSpecializationDiploma` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '-',
   `alumniGraduateYearDiploma` year(4) NOT NULL DEFAULT 0000,
   `alumniBatchDiploma` int(11) NOT NULL DEFAULT 0,
@@ -69,34 +69,38 @@ CREATE TABLE `alumni` (
 --
 
 INSERT INTO `alumni` (`alumniID`, `alumniAddress1`, `alumniAddress2`, `alumniAddressCity`, `alumniAddressCountry`, `alumniAddressPostCode`, `alumniAddressState`, `alumniBatchBachelor`, `alumniCurEmployer`, `alumniCurJob`, `alumniCurSalary`, `alumniFieldOfSpecializationBachelor`, `alumniGraduateYearBachelor`, `alumniPrevEmployer`, `alumniPrevJob`, `alumniPrevSalary`, `alumniProfilePicture`, `alumniProfStatus`, `alumniProfStatusYearGained`, `alumniStartStudyYearBachelor`, `employerAddress1`, `employerAddress2`, `employerAddressCity`, `employerAddressCountry`, `employerAddressPostCode`, `employerAddressState`, `alumniFieldOfSpecializationDiploma`, `alumniGraduateYearDiploma`, `alumniBatchDiploma`, `alumniStartStudyYearDiploma`, `alumniFieldOfSpecializationMaster`, `alumniGraduateYearMaster`, `alumniBatchMaster`, `alumniStartStudyYearMaster`) VALUES
-('1', 'Peace YALL', 'none', 'none', 'none', '00000', 'none', 6, 'none', 'none', 0, 'noneeqwe', 2010, 'none', 'none', 0, 'default.png', 'Sir', 2006, 2012, 'none', 'none', 'none', 'none', '00000', 'none', 'eqweqw', 2009, 8, 2011, '-eqweq', 2015, 9, 2013),
-('4', 'none', 'none', 'none', 'none', '00000', 'none', 0, 'none', 'none', 0, 'none', 0000, 'none', 'none', 0, 'default.png', 'Sir', 0000, 2000, 'none', 'none', 'none', 'none', '00000', 'none', '-', 2000, 0, 2000, '-', 2000, 0, 2000);
+('ALU118011', 'aladdress1', 'aladdress2', 'alcity', 'alcountry', '22222', 'alstate', 0, 'none', 'none', 0, '-', 0000, 'none', 'none', 0, 'default.png', 'Sir', 0000, 0000, 'address1', 'address2', 'city', 'country', '11111', 'state', '-', 0000, 0, 0000, '-', 0000, 0, 0000),
+('ALU127012', 'rumah', 'ladang', 'Bentong', 'Malaysia', '28800', 'Pahang', 2, 'Malaysian Architect SDN BHD', 'Architect', 10000, 'Bachelor in Architecture', 2010, 'Malaysian Architect SDN BHD', 'Junior Architect', 5000, 'default.png', 'Sir', 2002, 2006, 'Level 5 No 5', 'Malaysian Architect SDN BHD', 'Kuala Lumpur', 'Malaysia', '54700', 'Wilayah Persekutuan Kuala Lumpur', 'Diploma in Architecture', 2006, 1, 2002, 'Master in Architecture', 2014, 3, 2010),
+('ALU129012', '-', '-', '-', '-', '-', '-', 0, '-', '-', 0, '-', 0000, '-', '-', 0, 'default.png', '-', 0000, 0000, '-', '-', '-', '-', '-', '-', '-', 2006, 1, 2002, '-', 0000, 0, 0000);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Table structure for table `users`
 --
 
-CREATE TABLE `user` (
-  `id` int(11) NOT NULL,
+CREATE TABLE `users` (
+  `id` bigint(20) NOT NULL,
+  `userID` varchar(100) DEFAULT NULL,
   `name` varchar(300) NOT NULL,
   `phone` varchar(255) NOT NULL,
   `email` varchar(300) NOT NULL,
   `role` varchar(50) NOT NULL,
-  `password` varchar(300) NOT NULL,
-  `created_at` datetime DEFAULT current_timestamp()
+  `password` varchar(300) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `user`
+-- Dumping data for table `users`
 --
 
-INSERT INTO `user` (`id`, `name`, `phone`, `email`, `role`, `password`, `created_at`) VALUES
-(1, 'Azman Hasyim', '01111999621', 'azman@gmail.com', 'alumni', 'test@123', '2020-12-29 15:09:57'),
-(2, 'Fadilah', '0132079332', 'fadilah@gmail.com', 'admin', 'test@123', '2020-12-29 15:09:57'),
-(3, 'Kamal', '0199382231', 'kamal123@gmail.com', 'staff', 'test@123', '2020-12-29 15:09:57'),
-(4, 'Kamal Abdullah', '01111962721', 'kamal.abdullah@gmail.com', 'alumni', 'test@123', '2020-12-29 15:13:21');
+INSERT INTO `users` (`id`, `userID`, `name`, `phone`, `email`, `role`, `password`) VALUES
+(116, 'ADM116011', 'Nur Fatin Atiqah Binti Rozadin', '01125678404', 'nurfatinatiqahrozadin@gmail.com', 'ADMIN', 'fatinatiqah'),
+(117, 'STF117018', 'Rocco X. Nolen', '0186558624', 'ixrocco23@gmail.com', 'STAFF', '1234567890'),
+(118, 'ALU118011', 'Patrick U. Oneal', '0119777865', 'jupatrick20@gmail.com', 'ALUMNI', '1234567890'),
+(127, 'ALU127012', 'Juanita L. Rentas', '0123456278', 'juanita@gmail.com', 'ALUMNI', '1234567890'),
+(128, 'STF128019', 'Lalie X. Corley', '0192899191', 'cylola24@yopmail.com', 'STAFF', '1234567890'),
+(129, 'ALU129012', 'Kandy S. Bankhead', '0128899199', 'kandy@gmail.com', 'ALUMNI', '12345678'),
+(130, 'STF130019', 'Lynda V. Stickler', '0191223085', 'jvlynda21@gmail.com', 'STAFF', '1234567890');
 
 --
 -- Indexes for dumped tables
@@ -109,21 +113,22 @@ ALTER TABLE `alumni`
   ADD PRIMARY KEY (`alumniID`);
 
 --
--- Indexes for table `user`
+-- Indexes for table `users`
 --
-ALTER TABLE `user`
+ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`);
+  ADD UNIQUE KEY `username` (`email`),
+  ADD UNIQUE KEY `name` (`name`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `user`
+-- AUTO_INCREMENT for table `users`
 --
-ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
+ALTER TABLE `users`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=131;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -149,7 +149,7 @@ public class Alumni extends User implements Serializable {
      * @param country
      * @param postCode
      */
-    public void setEmployerAddress(String address1, String address2, String city, String state, String country, String postCode) {
+    public void setEmployerAddress(String address1, String address2, String city, String postCode, String state, String country) {
         this.employerAddress1 = address1;
         this.employerAddress2 = address2;
         this.employerAddressCity = city;

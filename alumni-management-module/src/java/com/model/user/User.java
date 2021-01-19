@@ -6,28 +6,18 @@
 package com.model.user;
 
 import java.io.Serializable;
-import java.sql.Date;
 
 /**
  *
  * @author PC
  */
 public class User implements Serializable {
-    private int id;
     private String name;
     private String phone;
     private String email;
     private String role;
     private String password;
-    private Date createdAt;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    private String userID;
 
     public String getName() {
         return name;
@@ -69,11 +59,11 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public String getUserID() {
+        return userID;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 }

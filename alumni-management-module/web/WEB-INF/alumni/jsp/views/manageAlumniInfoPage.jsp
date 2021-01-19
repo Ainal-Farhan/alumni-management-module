@@ -10,274 +10,67 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Manage Alumni</title>
+        <style>
+            .custom-shadow {
+                box-shadow: 
+                    rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, 
+                    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, 
+                    rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+            }
+            .center {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .table-custom {
+                width: 100%;
+            }
+        </style>
     </head>
     <body>
-        <%@include file="../components/navigationBar.jsp" %>
-        
+        <%@include file="../components/navigationBar.jsp" %>        
         <div style="width:90%;display:block;margin-right:auto;margin-left:auto;margin-top: 10px;margin-bottom: 10px;">
-            <form action="AlumniServlet" method="POST">                
-                <div class="form-group row">
-                    <div class="col">
-                        <img src="http://alumni-module.herokuapp.com/assets/img/profile/alumni/<%= request.getAttribute("profilePicture") %>" alt="<% out.print(request.getAttribute("profilePicture")); %>" class="mx-auto d-block" width="350" height="350" style="margin-top:10px;margin-bottom:10px;border-radius: 50%;">
+            <div class="jumbotron">
+                <h1 class="display-4">View Profile Page</h1>
+                
+                <form action="AlumniServlet" method="POST">                
+                    <div class="form-group row">
+                        <div class="col center">
+                            <img src="http://alumni-module.herokuapp.com/assets/img/profile/alumni/<%= request.getAttribute("profilePicture") %>" alt="<% out.print(request.getAttribute("profilePicture")); %>" class="mx-auto d-block" width="350" height="350" style="margin-top:10px;margin-bottom:10px;border-radius: 50%;">
+                        </div>
+                        <div class="col">
+                            <div class="custom-shadow">
+                                <jsp:include page="../components/alumniPersonalInformation.jsp" />
+                            </div>
+                            <div class="custom-shadow">
+                                <jsp:include page="../components/alumniProfessionalInformation.jsp" />
+                            </div>
+                        </div>
                     </div>
-                    <div class="col">
-                        <table class="table table-striped">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th colspan="2" style="text-align: center;">Personal Information</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th><label>Alumni ID</label></th>
-                                    <td><input type="text" class="form-control-plaintext" value="<% out.print(request.getAttribute("id")); %>" readonly></td>
-                                </tr>
-                                <tr>
-                                    <th><label>Name</label></th>
-                                    <td><input type="text" class="form-control-plaintext" id="name" value="<% out.print(request.getAttribute("name")); %>" readonly></td>
-                                </tr>
-                                <tr>
-                                    <th><label>Phone Number</label></th>
-                                    <td><input type="text" class="form-control-plaintext" id="phone-number" value="<% out.print(request.getAttribute("phoneNumber")); %>" readonly></td>
-                                </tr>
-                                <tr>
-                                    <th><label>Email</label></th>
-                                    <td><input type="email" class="form-control-plaintext" value="<% out.print(request.getAttribute("email")); %>" readonly></td>
-                                </tr>
-                                <tr>
-                                    <th><label>Professional Status</label></th>
-                                    <td><input type="text" class="form-control-plaintext" id="username" value="<% out.print(request.getAttribute("profStatus")); %>" readonly></td>
-                                </tr>
-                                <tr>
-                                    <th><label>Professional Status Gained (Year)</label></th>
-                                    <td><input type="number" min="1999" max="2999" class="form-control-plaintext" id="username" value="<% out.print(request.getAttribute("profStatusYearGained")); %>" readonly></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                                    
-                <div class="form-group">
-                    <table class="table table-striped">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th colspan="2" style="text-align: center;">
-                                    Mailing Address
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th>
-                                    <label>Address Line 1</label>
-                                </th>
-                                <td>
-                                    <input type="text" class="form-control-plaintext" id="alumniAddress1" value="<% out.print(request.getAttribute("alumniAddress1")); %>" readonly>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <label>Address Line 2</label>
-                                </th>
-                                <td>
-                                    <input type="text" class="form-control-plaintext" id="alumniAddress2" value="<% out.print(request.getAttribute("alumniAddress2")); %>" readonly>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <label>City</label>
-                                </th>
-                                <td>
-                                    <input type="text" class="form-control-plaintext" id="alumniAddressCity" value="<% out.print(request.getAttribute("alumniAddressCity")); %>" readonly>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <label>Post Code</label>
-                                </th>
-                                <td>
-                                    <input type="text" class="form-control-plaintext" id="alumniAddressPostCode" value="<% out.print(request.getAttribute("alumniAddressPostCode")); %>" readonly>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <label>State</label>
-                                </th>
-                                <td>
-                                    <input type="text" class="form-control-plaintext" id="alumniAddressState" value="<% out.print(request.getAttribute("alumniAddressState")); %>" readonly>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <label>Country</label>
-                                </th>
-                                <td>
-                                    <input type="text" class="form-control-plaintext" id="alumniAddressCountry" value="<% out.print(request.getAttribute("alumniAddressCountry")); %>" readonly>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
 
-                <div class="form-group">
-                    <table class="table table-striped">
-                        <thead class="thead-dark" style="text-align: center;">
-                            <tr>
-                                <th colspan="5">Educational Information</th>
-                            </tr>
-                            <tr>
-                                <th></th>
-                                <th>Diploma</th>
-                                <th>Bachelor</th>
-                                <th>Master</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th><label>Specialization</label></th>
-                                <td><input type="text" class="form-control-plaintext" value="<% out.print(request.getAttribute("fieldOfSpecializationDiploma")); %>" readonly></td>
-                                <td><input type="text" class="form-control-plaintext" value="<% out.print(request.getAttribute("fieldOfSpecializationBachelor")); %>" readonly></td>
-                                <td><input type="text" class="form-control-plaintext" value="<% out.print(request.getAttribute("fieldOfSpecializationMaster")); %>" readonly></td>
-                            </tr>
-                            <tr>
-                                <th><label>Batch</label></th>
-                                <td><input type="number" min="1" class="form-control-plaintext" value="<% out.print(request.getAttribute("batchDiploma")); %>" readonly></td>
-                                <td><input type="number" min="1" class="form-control-plaintext" value="<% out.print(request.getAttribute("batchBachelor")); %>" readonly></td>
-                                <td><input type="number" min="1" class="form-control-plaintext" value="<% out.print(request.getAttribute("batchMaster")); %>" readonly></td>
-                            </tr>
-                            <tr>
-                                <th><label>Start in (Year)</label></th>
-                                <td><input type="number" min="1999" max="2999" class="form-control-plaintext" value="<% out.print(request.getAttribute("startStudyYearDiploma")); %>" readonly></td>
-                                <td><input type="number" min="1999" max="2999" class="form-control-plaintext" value="<% out.print(request.getAttribute("startStudyYearBachelor")); %>" readonly></td>
-                                <td><input type="number" min="1999" max="2999" class="form-control-plaintext" value="<% out.print(request.getAttribute("startStudyYearMaster")); %>" readonly></td>
-                            </tr>
-                            <tr>
-                                <th><label>Graduate in (Year)</label></th>
-                                <td><input type="number" min="1999" max="2999" class="form-control-plaintext" value="<% out.print(request.getAttribute("graduateYearDiploma")); %>" readonly></td>
-                                <td><input type="number" min="1999" max="2999" class="form-control-plaintext" value="<% out.print(request.getAttribute("graduateYearBachelor")); %>" readonly></td>
-                                <td><input type="number" min="1999" max="2999" class="form-control-plaintext" value="<% out.print(request.getAttribute("graduateYearMaster")); %>" readonly></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                                
-                <div class="form-group">
-                    <table class="table table-striped">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th colspan="4" style="text-align: center;">
-                                    Employment Information
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th></th>
-                                <th>
-                                    <label>Current</label>
-                                </th>
-                                <th>
-                                    <label>Previous</label>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <label>Job</label>
-                                </th>
-                                <td>
-                                    <input type="text" class="form-control-plaintext" value="<% out.print(request.getAttribute("curJob")); %>" readonly>
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control-plaintext" value="<% out.print(request.getAttribute("prevJob")); %>" readonly>
-                                </td>
-                            </tr>
-                            <tr>    
-                                <th>
-                                    <label>Employer</label>
-                                </th>
-                                <td>
-                                    <input type="text" class="form-control-plaintext" value="<% out.print(request.getAttribute("curEmployer")); %>" readonly>
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control-plaintext" value="<% out.print(request.getAttribute("prevEmployer")); %>" readonly>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <label>Salary</label>
-                                </th>
-                                <td>
-                                    <input type="number" class="form-control-plaintext" value="<% out.print(String.format("%.2f", (Double)request.getAttribute("curSalary"))); %>" readonly>
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control-plaintext" value="<% out.print(String.format("%.2f", (Double)request.getAttribute("prevSalary"))); %>" readonly>
-                                </td>
-                            </tr>
-                            <tr class="table-primary">
-                                <th colspan="3" style="text-align: center;">
-                                    <label>Current Employer Address</label>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <label>Address Line 1</label>
-                                </th>
-                                <td colspan="2">
-                                    <input type="text" class="form-control-plaintext" id="alumniAddress1" value="<% out.print(request.getAttribute("employerAddress1")); %>" readonly>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <label>Address Line 2</label>
-                                </th>
-                                <td colspan="2">
-                                    <input type="text" class="form-control-plaintext" id="alumniAddress2" value="<% out.print(request.getAttribute("employerAddress2")); %>" readonly>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <label>City</label>
-                                </th>
-                                <td colspan="2">
-                                    <input type="text" class="form-control-plaintext" id="alumniAddressCity" value="<% out.print(request.getAttribute("employerAddressCity")); %>" readonly>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <label>Post Code</label>
-                                </th>
-                                <td colspan="2">
-                                    <input type="text" class="form-control-plaintext" id="alumniAddressPostCode" value="<% out.print(request.getAttribute("employerAddressPostCode")); %>" readonly>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <label>State</label>
-                                </th>
-                                <td colspan="2">
-                                    <input type="text" class="form-control-plaintext" id="alumniAddressState" value="<% out.print(request.getAttribute("employerAddressState")); %>" readonly>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <label>Country</label>
-                                </th>
-                                <td colspan="2">
-                                    <input type="text" class="form-control-plaintext" id="alumniAddressCountry" value="<% out.print(request.getAttribute("employerAddressCountry")); %>" readonly>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                                
-                <div class="form-group" style="width:200px;display:block;margin-right:auto;margin-left:auto;margin-top: 10px;margin-bottom: 10px;">
-                    <input type="hidden" name="requestType" value="deleteOrUpdateAlumniInfo">
-                    <input type="submit" name="update-btn" class="btn btn-success" value="Update">
-                    <%  if(currentUserType.equalsIgnoreCase("staff") || currentUserType.equalsIgnoreCase("admin")) { %>
-                    <input type="submit" name="delete-btn" class="btn btn-danger" value="Delete">
-                    <%  } %>
-                </div>
-            </form>
+                    <div class="form-group custom-shadow">
+                        <jsp:include page="../components/alumniMailingAddress.jsp" />
+                    </div>
+
+                    <div class="form-group custom-shadow">
+                        <jsp:include page="../components/alumniEducationalInformation.jsp" />
+                    </div>
+
+                    <div class="form-group custom-shadow">
+                        <jsp:include page="../components/alumniEmploymentInformation.jsp" />
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="form-group" style="width:200px;display:block;margin-right:auto;margin-left:auto;margin-top: 10px;margin-bottom: 10px;">
+                        <input type="hidden" name="requestType" value="deleteOrUpdateAlumniInfo">
+                        <input type="submit" name="update-btn" class="btn btn-success" value="Update">
+                        <%  if(currentUserType.equalsIgnoreCase("staff") || currentUserType.equalsIgnoreCase("admin")) { %>
+                        <input type="submit" name="delete-btn" class="btn btn-danger" value="Delete">
+                        <%  } %>
+                    </div>
+                </form>
+            </div>
         </div>
     </body>
 </html>

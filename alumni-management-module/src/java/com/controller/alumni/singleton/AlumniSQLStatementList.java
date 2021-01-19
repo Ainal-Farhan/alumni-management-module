@@ -13,7 +13,7 @@ public interface AlumniSQLStatementList {
     // RETRIEVE SQL STATEMENT
     
     String SQL_STATEMENT_RETRIEVE_ALL_FROM_TABLE_ALUMNI = "SELECT * FROM alumni;";
-    String SQL_STATEMENT_RETRIEVE_ALL_FROM_TABLE_USER_WHERE_ROLE_IS_ALUMNI = "SELECT * FROM user WHERE role = 'alumni';";
+    String SQL_STATEMENT_RETRIEVE_ALL_FROM_TABLE_USER_WHERE_ROLE_IS_ALUMNI = "SELECT * FROM users WHERE role = 'alumni';";
     
     // UPDATE SQL STATEMENT
     String SQL_STATEMENT_UPDATE_SELECTED_ALUMNI_INFO = "UPDATE `alumni` "
@@ -31,5 +31,5 @@ public interface AlumniSQLStatementList {
     
     // DELETE SQL STATEMENT
     String SQL_STATEMENT_DELETE_SELECTED_ALUMNI = "DELETE FROM `alumni` WHERE `alumni`.`alumniID` = ?";
-    String SQL_STATEMENT_DELETE_SELECTED_USER = "DELETE FROM `user` WHERE `user`.`id` = ?";
+    String SQL_STATEMENT_DELETE_SELECTED_USER = "DELETE FROM `users` WHERE `users`.`userID` = ?";
 }
